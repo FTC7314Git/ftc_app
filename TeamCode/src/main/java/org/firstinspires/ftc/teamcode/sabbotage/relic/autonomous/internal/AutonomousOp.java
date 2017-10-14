@@ -31,6 +31,7 @@ public abstract class AutonomousOp extends OpMode {
 
     @Override
     public void init() {
+        Log.i(KEY, "init:");
         this.robot = new Robot(hardwareMap, telemetry);
         this.stepList = definedStepList();
         init_calibrateGyroSensors();
@@ -39,8 +40,8 @@ public abstract class AutonomousOp extends OpMode {
 
     private void init_calibrateGyroSensors() {
 
-
-//        robot.gyroSensor.calibrate();
+        Log.i(KEY, "init_calibrateGyroSensors:");
+        robot.gyroSensor.calibrate();
 
     }
 
@@ -72,8 +73,7 @@ public abstract class AutonomousOp extends OpMode {
 
     private boolean isCalibratingGyroSensor() {
 
-//        return (robot.gyroSensor.isCalibrating());
-        return false;
+        return (robot.gyroSensor.isCalibrating());
     }
 
     private void initStartTime() {
