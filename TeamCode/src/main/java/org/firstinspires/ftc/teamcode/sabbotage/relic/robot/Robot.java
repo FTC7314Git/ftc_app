@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 //   TODO consider using the robot for single loopCounter and delayUntilLoopCount
 // and stillWaiting.
@@ -37,6 +37,7 @@ public class Robot {
     public Servo servoLeftPaddle;
 
     public ModernRoboticsI2cGyro gyroSensor;
+    private RelicRecoveryVuMark vuMark = null;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
 
@@ -61,6 +62,9 @@ public class Robot {
         resetHardwarePositions();
     }
 
+    public HardwareMap getHardwareMap() {
+        return hardwareMap;
+    }
 
     public void resetDriveMotors() {
 
@@ -139,6 +143,14 @@ public class Robot {
     public void setLoopDelay() {
 
         this.delayUntilLoopCount = loopCounter + HARDWARE_DELAY;
+    }
+
+    public void setVuMark(RelicRecoveryVuMark vuMark) {
+        this.vuMark = vuMark;
+    }
+
+    public RelicRecoveryVuMark getVuMark() {
+        return this.vuMark;
     }
 
     public static enum ColorEnum {
