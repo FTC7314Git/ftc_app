@@ -6,7 +6,6 @@ import android.util.Log;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-
 public class Step_TurnRight implements AutonomousOp.StepInterface {
 
     private static final double TARGET_TOLERANCE = 1;
@@ -155,7 +154,7 @@ public class Step_TurnRight implements AutonomousOp.StepInterface {
     private void logIt(String methodName) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(" , CurrentAngle:" + robot.gyroSensor.getRotationFraction());
+        sb.append(" , CurrentAngle:" + robot.gyroSensor.getIntegratedZValue());
         sb.append(" , TargetAngle:" + targetAngle);
         sb.append(" , RemainingAngle:" + remainingAngle());
         sb.append(" , L Power:" + robot.motorDriveLeft.getPower() + " , R Power:" + robot.motorDriveRight.getPower());
