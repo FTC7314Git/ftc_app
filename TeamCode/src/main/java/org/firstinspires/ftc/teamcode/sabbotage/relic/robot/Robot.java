@@ -2,11 +2,19 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.robot;
 
 import android.util.Log;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 //   TODO consider using the robot for single loopCounter and delayUntilLoopCount
 // and stillWaiting.
@@ -28,6 +36,8 @@ public class Robot {
     public Servo servoRightPaddle;
     public Servo servoLeftPaddle;
 
+    public ModernRoboticsI2cGyro gyroSensor;
+
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
 
         this.hardwareMap = hardwareMap;
@@ -35,7 +45,7 @@ public class Robot {
 
         if (this.hardwareMap == null) {
 
-            Log.i("ROBOT", "OUCH!!!! hardwareMap is null");
+            Log.i("ROBOT", "OOF!!!! hardwareMap is null");
 
         }
 
@@ -45,6 +55,8 @@ public class Robot {
 
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
+
+        this.gyroSensor = this.hardwareMap.get(ModernRoboticsI2cGyro.class, "gyroSensor");
 
         resetHardwarePositions();
     }
@@ -195,7 +207,6 @@ public class Robot {
         }
 
     }
-
 
 }
 

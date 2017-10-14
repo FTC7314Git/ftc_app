@@ -60,6 +60,10 @@ import java.util.ArrayList;
 
         definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.REVERSE));
 
+        definedStepList.add(new Step_TurnLeft(90));
+
+        definedStepList.add(new Step_TurnRight(90));
+
         return definedStepList;
     }
 
