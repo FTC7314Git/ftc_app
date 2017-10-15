@@ -55,13 +55,13 @@ import java.util.ArrayList;
 
     protected ArrayList<StepInterface> stepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
-//
-//        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.FORWARD));
-//
-//        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.REVERSE));
-//
-//        definedStepList.add(new Step_TurnLeft(90));
-//
+
+        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.FORWARD));
+
+        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.REVERSE));
+
+        definedStepList.add(new Step_TurnLeft(90));
+
         definedStepList.add(new Step_TurnRight(90));
 
         return definedStepList;
