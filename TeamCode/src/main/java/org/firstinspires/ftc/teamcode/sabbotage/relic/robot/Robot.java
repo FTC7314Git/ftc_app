@@ -1,31 +1,34 @@
 package org.firstinspires.ftc.teamcode.sabbotage.relic.robot;
 
+import android.provider.Settings;
 import android.util.Log;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-
-//   TODO consider using the robot for single loopCounter and delayUntilLoopCount
-// and stillWaiting.
 
 public class Robot {
+
 
     private HardwareMap hardwareMap;
     public int HARDWARE_DELAY = 30;
 
+    public static final double SERVO_JEWEL_ARM_POSITION_DOWN = 1.0;
+    public static final double SERVO_JEWEL_ARM_POSITION_UP = 1.0;
+
+    private Robot.TeamEnum jewelColor;
+
     public int loopCounter;
-    private int delayUntilLoopCount = 0;
+
+    private long delayUntilTimeMilliSeconds;
+
+    private int delayUntilLoopCount;
 
 
     public Telemetry telemetry;
@@ -35,6 +38,11 @@ public class Robot {
 
     public Servo servoRightPaddle;
     public Servo servoLeftPaddle;
+    public Servo servoJewelArm;
+
+    public ColorSensor colorSensorJewel;
+    public DistanceSensor distanceSensorJewel;
+
 
     public ModernRoboticsI2cGyro gyroSensor;
     private RelicRecoveryVuMark vuMark = null;
@@ -57,7 +65,12 @@ public class Robot {
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
 
+        this.servoJewelArm = hardwareMap.servo.get("servoJewelArm");
+
         this.gyroSensor = this.hardwareMap.get(ModernRoboticsI2cGyro.class, "gyroSensor");
+
+        this.colorSensorJewel = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
+        this.distanceSensorJewel = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");
 
         resetHardwarePositions();
     }
@@ -95,7 +108,10 @@ public class Robot {
 
         this.servoLeftPaddle.setDirection(Servo.Direction.REVERSE);
         this.servoRightPaddle.setDirection(Servo.Direction.REVERSE);
+        this.servoJewelArm.setDirection(Servo.Direction.FORWARD);
 
+
+        this.servoJewelArm.setPosition(0.0);
         this.servoLeftPaddle.setPosition(0.0);
         this.servoRightPaddle.setPosition(0.0);
     }
@@ -133,8 +149,8 @@ public class Robot {
 
     public boolean isStillWaiting() {
 
-        if (delayUntilLoopCount > loopCounter) {
-            Log.i("ROBOT", "Waiting..." + loopCounter);
+        if (delayUntilLoopCount > loopCounter || delayUntilTimeMilliSeconds > System.currentTimeMillis()) {
+            Log.i("ROBOT", "Waiting..." + loopCounter + "  Waiting..mS." + System.currentTimeMillis());
             return true;
         }
         return false;
@@ -145,6 +161,11 @@ public class Robot {
         this.delayUntilLoopCount = loopCounter + HARDWARE_DELAY;
     }
 
+    public void setTimeDelay(long delayMilliSeconds) {
+
+        this.delayUntilTimeMilliSeconds = System.currentTimeMillis() + delayMilliSeconds;
+    }
+
     public void setVuMark(RelicRecoveryVuMark vuMark) {
         this.vuMark = vuMark;
     }
@@ -152,6 +173,16 @@ public class Robot {
     public RelicRecoveryVuMark getVuMark() {
         return this.vuMark;
     }
+
+
+    public TeamEnum getJewelColor() {
+        return jewelColor;
+    }
+
+    public void setJewelColor(TeamEnum jewelColor) {
+        this.jewelColor = jewelColor;
+    }
+
 
     public static enum ColorEnum {
 
