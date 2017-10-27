@@ -6,7 +6,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
-
+import java.util.ArrayList;
 public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private Robot robot;
@@ -17,7 +17,6 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     private Robot.TeamEnum forwardJewelColor;
 
     private final double SCALE_FACTOR = 255;
-
 
     // Constructor, called to create an instance of this class.
     public Step_JewelScoring(Robot.TeamEnum teamColor) {
@@ -54,14 +53,14 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private void lowerJewelArm_runsOnlyOnce() {
 
-
         if (robot.isStillWaiting()) return;
-
 
         if (lowerJewelArmDoneFlag == false) {
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_DOWN);
             lowerJewelArmDoneFlag = true;
             robot.setTimeDelay(2000);
+            Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce");
+
         }
     }
 
@@ -76,6 +75,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_UP);
             raiseJewelArmDoneFlag = true;
             robot.setTimeDelay(2000);
+            Log.i(getLogKey(), "raiseJewelArm_runsOnlyOnce");
         }
     }
 
@@ -95,6 +95,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
             robot.setTimeDelay(2000);
+            Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
 
@@ -107,11 +108,13 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
             robot.motorDriveRight.setPower(-power);
             robot.motorDriveLeft.setPower(-power);
+            Log.i(getLogKey(), "driveRobotToDisplaceJewel Backward");
 
 
         } else {
             robot.motorDriveRight.setPower(+power);
             robot.motorDriveLeft.setPower(+power);
+            Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
         }
     }
 
@@ -137,15 +140,22 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             return;
         }
 
-        float hsvValues[] = {0F, 0F, 0F};
 
-        Color.RGBToHSV(readRedColor(), readGreanColor(), readBlueColor(),
-                hsvValues);
+        if ( readRedColor() >  readBlueColor()){
+
+            this.forwardJewelColor = Robot.TeamEnum.RED;
+            Log.i(getLogKey(), "determineJewelColor RED");
+
+        }
+
+        if ( readBlueColor() >  readRedColor()){
+
+            this.forwardJewelColor = Robot.TeamEnum.BLUE;
+            Log.i(getLogKey(), "determineJewelColor BLUE");
+
+        }
 
 
-        // TODO Add threshold condition for jewel colors
-
-        this.forwardJewelColor = Robot.TeamEnum.BLUE;
 
     }
 
@@ -168,10 +178,6 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         return (int) blue;
     }
 
-    private int readGreanColor() {
-        double green = this.robot.colorSensorJewel.green() * SCALE_FACTOR;
-        return (int) green;
-    }
 
     @Override
     public boolean isAborted() {
