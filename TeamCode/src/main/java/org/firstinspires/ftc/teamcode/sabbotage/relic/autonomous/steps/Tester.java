@@ -32,7 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
 
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
@@ -40,31 +39,19 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
-    @Autonomous(name = "AutoRed", group = "Red")
-    public class Tester extends AutonomousOp {
+@Autonomous(name = "AutoRed", group = "Red")
+public class Tester extends AutonomousOp {
 
 
-        @Override
+    @Override
     protected ArrayList<StepInterface> definedStepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-        return stepList();
+        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
 
-    }
-
-
-    protected ArrayList<StepInterface> stepList() {
-        ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
-
-        definedStepList.add(new Step_ReadVuMark());
-
-//        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.REVERSE));
-
-        definedStepList.add(new Step_TurnLeft(90));
-
-        definedStepList.add(new Step_TurnRight(90));
 
         return definedStepList;
+
     }
 
 }
