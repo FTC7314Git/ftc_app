@@ -143,7 +143,6 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         if ( readRedColor() >  readBlueColor()){
 
-//            this.forwardJewelColor = Robot.TeamEnum.RED;
             this.voteRed++;
             Log.i(getLogKey(), "read RED");
 
@@ -151,7 +150,6 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         if ( readBlueColor() >  readRedColor()){
 
-//            this.forwardJewelColor = Robot.TeamEnum.BLUE;
             this.voteBlue++;
             Log.i(getLogKey(), "read BLUE");
 
@@ -161,13 +159,15 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     }
 
     private void analyzeVote() {
+
+
         if (voteRed > voteBlue) {
             this.forwardJewelColor = Robot.TeamEnum.RED;
-            Log.i(getLogKey(), "analyzeVote(): Red WINS!");
+            Log.i(getLogKey(), "analyzeVote(): Red WINS! " +voteRed + " blue:" + voteBlue );
         }
         if (voteBlue > voteRed) {
             this.forwardJewelColor = Robot.TeamEnum.BLUE;
-            Log.i(getLogKey(), "analyzeVote(): Blue WINS!");
+            Log.i(getLogKey(), "analyzeVote(): Blue WINS!" +voteBlue + " red:" + voteRed );
         }
     }
 
