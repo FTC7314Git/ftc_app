@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
 
-import android.graphics.Color;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
-import java.util.ArrayList;
+
 public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private Robot robot;
@@ -15,6 +14,9 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     private boolean displaceJewelDoneFlag;
     private Robot.TeamEnum teamColor;
     private Robot.TeamEnum forwardJewelColor;
+
+    private int voteRed = 0;
+    private int voteBlue = 0;
 
     private final double SCALE_FACTOR = 255;
 
@@ -135,32 +137,48 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         if (robot.isStillWaiting()) return;
 
-
         if (isJewelColorKnown()) {
             return;
         }
 
-
         if ( readRedColor() >  readBlueColor()){
 
-            this.forwardJewelColor = Robot.TeamEnum.RED;
-            Log.i(getLogKey(), "determineJewelColor RED");
+//            this.forwardJewelColor = Robot.TeamEnum.RED;
+            this.voteRed++;
+            Log.i(getLogKey(), "read RED");
 
         }
 
         if ( readBlueColor() >  readRedColor()){
 
-            this.forwardJewelColor = Robot.TeamEnum.BLUE;
-            Log.i(getLogKey(), "determineJewelColor BLUE");
+//            this.forwardJewelColor = Robot.TeamEnum.BLUE;
+            this.voteBlue++;
+            Log.i(getLogKey(), "read BLUE");
 
         }
 
 
+    }
 
+    private void analyzeVote() {
+        if (voteRed > voteBlue) {
+            this.forwardJewelColor = Robot.TeamEnum.RED;
+            Log.i(getLogKey(), "analyzeVote(): Red WINS!");
+        }
+        if (voteBlue > voteRed) {
+            this.forwardJewelColor = Robot.TeamEnum.BLUE;
+            Log.i(getLogKey(), "analyzeVote(): Blue WINS!");
+        }
     }
 
     private boolean isJewelColorKnown() {
+
+        if (Math.abs(this.voteRed - this.voteBlue) >= 50) {
+            analyzeVote();
+        }
+
         return this.forwardJewelColor != null;
+
     }
 
 
