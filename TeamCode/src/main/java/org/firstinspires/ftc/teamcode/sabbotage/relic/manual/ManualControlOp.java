@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
@@ -14,6 +15,7 @@ public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
     public static final double SERVO_OPEN = 0.99;
     public static final int SERVO_CLOSE = 0;
+    boolean resetBlockLiftDoneFlag;
 
     private Robot robot;
 
@@ -27,6 +29,25 @@ public class ManualControlOp extends OpMode {
     public void init() {
 
         this.robot = new Robot(hardwareMap, telemetry);
+
+        init_ResetBlockLift_onlyRunsOnce();
+//        init_InitEncoders();
+    }
+
+    private void init_InitEncoders() {
+        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    private void init_ResetBlockLift_onlyRunsOnce() {
+        if (robot.isStillWaiting()) return;
+
+        if (resetBlockLiftDoneFlag == false) {
+            robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            resetBlockLiftDoneFlag = true;
+            robot.setTimeDelay(1000);
+            Log.i(KEY, "init_ResetBlockLift_onlyRunsOnce()");
+
+        }
     }
 
 
@@ -42,22 +63,33 @@ public class ManualControlOp extends OpMode {
 
         driver_controlDriveMotors();
         operator_controlPaddles();
+        operator_controlBlockLift();
+    }
 
+    private void operator_controlBlockLift() {
+        robot.motorBlockLift.setPower(limitValue(gamepad2.right_stick_y));
+
+        Log.i(KEY,"encoder" + robot.motorBlockLift.getCurrentPosition());
     }
 
     private void operator_controlPaddles() {
 
-        if (gamepad1.x) {
+        if (gamepad2.x) {
             robot.servoLeftPaddle.setPosition(SERVO_OPEN);
             robot.servoRightPaddle.setPosition(SERVO_OPEN);
         }
-        if (gamepad1.b) {
+        if (gamepad2.b) {
             robot.servoLeftPaddle.setPosition(SERVO_CLOSE);
             robot.servoRightPaddle.setPosition(SERVO_CLOSE);
         }
 
     }
 
+
+//    private int getRemainingDistance() {
+//
+//        return Math.abs(distanceEncoderCounts - robot.motorBlockLift.getCurrentPosition());
+//    }
 
     private void driver_controlDriveMotors() {
 
