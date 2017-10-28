@@ -35,6 +35,7 @@ public class Robot {
 
     public DcMotor motorDriveRight;
     public DcMotor motorDriveLeft;
+    public DcMotor motorBlockLift;
 
     public Servo servoRightPaddle;
     public Servo servoLeftPaddle;
@@ -61,6 +62,7 @@ public class Robot {
 
         this.motorDriveLeft = this.hardwareMap.dcMotor.get("motorDriveLeft");
         this.motorDriveRight = this.hardwareMap.dcMotor.get("motorDriveRight");
+        this.motorBlockLift = this.hardwareMap.dcMotor.get("motorBlockLift");
 
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
@@ -120,6 +122,7 @@ public class Robot {
 
         this.motorDriveLeft.setDirection(DcMotor.Direction.REVERSE);
         this.motorDriveRight.setDirection(DcMotor.Direction.FORWARD);
+        this.motorBlockLift.setDirection(DcMotor.Direction.FORWARD);
 
 
     }
