@@ -9,13 +9,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-@Autonomous(name="ManualRobot", group="Concept")
+@Autonomous(name = "ManualRobot", group = "Concept")
 
 public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
-    public static final double SERVO_OPEN = 0.99;
-    public static final int SERVO_CLOSE = 0;
+    public static final double SERVO_RIGHT_OPEN = 0.1;
+    public static final double SERVO_RIGHT_CLOSE = 0.65;
+
+    private static final int FIRST_FLOOR = 0;
+    private static final int SECOND_FLOOR = FIRST_FLOOR +175;
+    private static final int THIRD_FLOOR = SECOND_FLOOR +175;
+    private static final int FOURTH_FLOOR = THIRD_FLOOR +175;
+
+
     boolean resetBlockLiftDoneFlag;
+    private int targetBlockLiftPosition = 0;
 
     private Robot robot;
 
@@ -35,10 +43,11 @@ public class ManualControlOp extends OpMode {
     }
 
     private void init_InitEncoders() {
-        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void init_ResetBlockLift_onlyRunsOnce() {
+
         if (robot.isStillWaiting()) return;
 
         if (resetBlockLiftDoneFlag == false) {
@@ -67,20 +76,41 @@ public class ManualControlOp extends OpMode {
     }
 
     private void operator_controlBlockLift() {
-        robot.motorBlockLift.setPower(limitValue(gamepad2.right_stick_y));
 
-        Log.i(KEY,"encoder" + robot.motorBlockLift.getCurrentPosition());
+        determineTargetBlockLiftPosition();
+
+
+        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBlockLift.setTargetPosition(this.targetBlockLiftPosition);
+        robot.motorBlockLift.setPower(.9);
+
+        Log.i(KEY, "encoder" + robot.motorBlockLift.getCurrentPosition());
+    }
+
+    private void determineTargetBlockLiftPosition() {
+
+        if (gamepad2.dpad_down) {
+            targetBlockLiftPosition = FIRST_FLOOR;
+        } else if (gamepad2.dpad_left) {
+            targetBlockLiftPosition = SECOND_FLOOR;
+        } else if (gamepad2.dpad_up) {
+            targetBlockLiftPosition = THIRD_FLOOR;
+        } else if (gamepad2.dpad_right) {
+            targetBlockLiftPosition = FOURTH_FLOOR;
+        }
+
     }
 
     private void operator_controlPaddles() {
 
+        Log.i(KEY, "Right Servo: " + robot.servoRightPaddle.getPosition());
         if (gamepad2.x) {
-            robot.servoLeftPaddle.setPosition(SERVO_OPEN);
-            robot.servoRightPaddle.setPosition(SERVO_OPEN);
+            robot.servoLeftPaddle.setPosition(SERVO_RIGHT_OPEN);
+            robot.servoRightPaddle.setPosition(SERVO_RIGHT_OPEN);
         }
         if (gamepad2.b) {
-            robot.servoLeftPaddle.setPosition(SERVO_CLOSE);
-            robot.servoRightPaddle.setPosition(SERVO_CLOSE);
+            robot.servoLeftPaddle.setPosition(SERVO_RIGHT_CLOSE);
+            robot.servoRightPaddle.setPosition(SERVO_RIGHT_CLOSE);
         }
 
     }
@@ -93,14 +123,13 @@ public class ManualControlOp extends OpMode {
 
     private void driver_controlDriveMotors() {
 
-        // write the values to the motors
         robot.motorDriveRight.setPower(limitValue(-gamepad1.right_stick_y));
         robot.motorDriveLeft.setPower(limitValue(-gamepad1.left_stick_y));
 
-        Log.i(KEY,"gamepad1.right_stick_y" + -gamepad1.right_stick_y);
-        Log.i(KEY, "WHEELS: [" + robot.motorDriveRight.getDirection()+ ": " +
-                String.format("%.0f", robot.motorDriveRight.getPower() * 100) + "]---[" +
-                robot.motorDriveRight.getDirection()+ ": " +String.format("%.0f", robot.motorDriveLeft.getPower() * 100) + "]");
+//        Log.i(KEY,"gamepad1.right_stick_y" + -gamepad1.right_stick_y);
+//        Log.i(KEY, "WHEELS: [" + robot.motorDriveRight.getDirection()+ ": " +
+//                String.format("%.0f", robot.motorDriveRight.getPower() * 100) + "]---[" +
+//                robot.motorDriveRight.getDirection()+ ": " +String.format("%.0f", robot.motorDriveLeft.getPower() * 100) + "]");
 
     }
 

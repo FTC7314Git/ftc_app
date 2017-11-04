@@ -6,6 +6,7 @@ import android.util.Log;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -115,14 +116,14 @@ public class Robot {
 
         this.servoJewelArm.setPosition(0.0);
         this.servoLeftPaddle.setPosition(0.0);
-        this.servoRightPaddle.setPosition(0.0);
+        this.servoRightPaddle.setPosition(0.1);
     }
 
     public void setDriveMotorForwardDirection() {
 
         this.motorDriveLeft.setDirection(DcMotor.Direction.REVERSE);
         this.motorDriveRight.setDirection(DcMotor.Direction.FORWARD);
-        this.motorBlockLift.setDirection(DcMotor.Direction.FORWARD);
+        this.motorBlockLift.setDirection(DcMotor.Direction.REVERSE);
 
 
     }
