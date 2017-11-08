@@ -5,16 +5,20 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-@Autonomous(name = "ManualRobot", group = "Concept")
-
+@TeleOp (name = "ManualRobot", group = "Concept")
 public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
-    public static final double SERVO_RIGHT_OPEN = 0.1;
-    public static final double SERVO_RIGHT_CLOSE = 0.65;
+
+    private static final double SERVO_PADDLE_RIGHT_OPEN = 0.1;
+    private static final double SERVO_PADDLE_RIGHT_CLOSE = 0.5;
+
+    private static final double SERVO_PADDLE_LEFT_OPEN = 0.0;
+    private static final double SERVO_PADDLE_LEFT_CLOSE = 0.5;
 
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR +175;
@@ -105,12 +109,12 @@ public class ManualControlOp extends OpMode {
 
         Log.i(KEY, "Right Servo: " + robot.servoRightPaddle.getPosition());
         if (gamepad2.x) {
-            robot.servoLeftPaddle.setPosition(SERVO_RIGHT_OPEN);
-            robot.servoRightPaddle.setPosition(SERVO_RIGHT_OPEN);
+            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_OPEN);
+            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_OPEN);
         }
         if (gamepad2.b) {
-            robot.servoLeftPaddle.setPosition(SERVO_RIGHT_CLOSE);
-            robot.servoRightPaddle.setPosition(SERVO_RIGHT_CLOSE);
+            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_CLOSE);
+            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_CLOSE);
         }
 
     }

@@ -109,14 +109,14 @@ public class Robot {
 
     public void resetServos() {
 
-        this.servoLeftPaddle.setDirection(Servo.Direction.REVERSE);
+        this.servoLeftPaddle.setDirection(Servo.Direction.FORWARD);
         this.servoRightPaddle.setDirection(Servo.Direction.REVERSE);
         this.servoJewelArm.setDirection(Servo.Direction.FORWARD);
 
 
         this.servoJewelArm.setPosition(0.0);
-        this.servoLeftPaddle.setPosition(0.0);
-        this.servoRightPaddle.setPosition(0.1);
+//        this.servoLeftPaddle.setPosition(0.0);
+//        this.servoRightPaddle.setPosition(0.1);
     }
 
     public void setDriveMotorForwardDirection() {
