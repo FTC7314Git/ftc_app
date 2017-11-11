@@ -3,27 +3,31 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.manual;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-@TeleOp (name = "ManualRobot", group = "Concept")
+@TeleOp(name = "ManualRobot", group = "Concept")
 public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
 
-    private static final double SERVO_PADDLE_RIGHT_OPEN = 0.1;
-    private static final double SERVO_PADDLE_RIGHT_CLOSE = 0.5;
+    private static final double SERVO_PADDLE_RIGHT_OPEN = 0.2;
+    private static final double SERVO_PADDLE_RIGHT_RELEASE = 0.55;
+    private static final double SERVO_PADDLE_RIGHT_CLOSE = 0.75;
 
-    private static final double SERVO_PADDLE_LEFT_OPEN = 0.0;
-    private static final double SERVO_PADDLE_LEFT_CLOSE = 0.5;
+    private static final double SERVO_PADDLE_LEFT_OPEN = 0.1;
+    private static final double SERVO_PADDLE_LEFT_RELEASE = 0.35;
+    private static final double SERVO_PADDLE_LEFT_CLOSE = 0.55;
 
+
+
+    private static final int FLOOR = 150;
     private static final int FIRST_FLOOR = 0;
-    private static final int SECOND_FLOOR = FIRST_FLOOR +175;
-    private static final int THIRD_FLOOR = SECOND_FLOOR +175;
-    private static final int FOURTH_FLOOR = THIRD_FLOOR +175;
+    private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 30;
+    private static final int THIRD_FLOOR = SECOND_FLOOR + FLOOR;
+    private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR;
 
 
     boolean resetBlockLiftDoneFlag;
@@ -86,7 +90,7 @@ public class ManualControlOp extends OpMode {
 
         robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBlockLift.setTargetPosition(this.targetBlockLiftPosition);
-        robot.motorBlockLift.setPower(.9);
+        robot.motorBlockLift.setPower(.6);
 
         Log.i(KEY, "encoder" + robot.motorBlockLift.getCurrentPosition());
     }
@@ -108,13 +112,20 @@ public class ManualControlOp extends OpMode {
     private void operator_controlPaddles() {
 
         Log.i(KEY, "Right Servo: " + robot.servoRightPaddle.getPosition());
+
         if (gamepad2.x) {
-            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_OPEN);
-            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_OPEN);
+            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_RELEASE);
+            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_RELEASE);
         }
+
         if (gamepad2.b) {
             robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_CLOSE);
             robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_CLOSE);
+        }
+
+        if (gamepad2.y) {
+            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_OPEN);
+            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_OPEN);
         }
 
     }
@@ -127,8 +138,8 @@ public class ManualControlOp extends OpMode {
 
     private void driver_controlDriveMotors() {
 
-        robot.motorDriveRight.setPower(limitValue(-gamepad1.right_stick_y));
-        robot.motorDriveLeft.setPower(limitValue(-gamepad1.left_stick_y));
+        robot.motorDriveRight.setPower(scaleOutput(-gamepad1.right_stick_y));
+        robot.motorDriveLeft.setPower(scaleOutput(-gamepad1.left_stick_y));
 
 //        Log.i(KEY,"gamepad1.right_stick_y" + -gamepad1.right_stick_y);
 //        Log.i(KEY, "WHEELS: [" + robot.motorDriveRight.getDirection()+ ": " +
@@ -136,6 +147,16 @@ public class ManualControlOp extends OpMode {
 //                robot.motorDriveRight.getDirection()+ ": " +String.format("%.0f", robot.motorDriveLeft.getPower() * 100) + "]");
 
     }
+
+    private float conditionsPower(float input) {
+
+        if( Math.abs(input) < .5) {
+            return input / 5;
+        }
+        return input;
+    }
+
+
 
     private float limitValue(float input) {
 
@@ -166,9 +187,9 @@ public class ManualControlOp extends OpMode {
      * scaled value is less than linear.  This is to make it easier to drive
      * the robot more precisely at slower speeds.
      */
-    double scaleOutput(double inputValue, double[] scaleArray) {
+    double scaleOutput(float inputValue) {
 
-
+        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, 1 , 1 };
         // get the corresponding index for the scaleOutput array.
         int index = (int) (inputValue * 16.0);
         if (index < 0) {
