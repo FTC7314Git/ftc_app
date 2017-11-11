@@ -25,7 +25,7 @@ public class ManualControlOp extends OpMode {
 
     private static final int FLOOR = 150;
     private static final int FIRST_FLOOR = 0;
-    private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 30;
+    private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
     private static final int THIRD_FLOOR = SECOND_FLOOR + FLOOR;
     private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR;
 
