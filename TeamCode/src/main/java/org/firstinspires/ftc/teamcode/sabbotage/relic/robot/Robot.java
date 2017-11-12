@@ -38,6 +38,11 @@ public class Robot {
     public DcMotor motorDriveLeft;
     public DcMotor motorBlockLift;
 
+
+    public DcMotor motorRobotLift;
+    public DcMotor motorRobotSideways;
+
+
     public Servo servoRightPaddle;
     public Servo servoLeftPaddle;
     public Servo servoJewelArm;
@@ -64,6 +69,9 @@ public class Robot {
         this.motorDriveLeft = this.hardwareMap.dcMotor.get("motorDriveLeft");
         this.motorDriveRight = this.hardwareMap.dcMotor.get("motorDriveRight");
         this.motorBlockLift = this.hardwareMap.dcMotor.get("motorBlockLift");
+
+        this.motorRobotLift = this.hardwareMap.dcMotor.get("motorRobotLift");
+        this.motorRobotSideways = this.hardwareMap.dcMotor.get("motorRobotSideways");
 
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");

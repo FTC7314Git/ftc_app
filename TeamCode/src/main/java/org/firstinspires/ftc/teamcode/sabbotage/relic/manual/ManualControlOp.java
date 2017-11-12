@@ -22,7 +22,6 @@ public class ManualControlOp extends OpMode {
     private static final double SERVO_PADDLE_LEFT_CLOSE = 0.55;
 
 
-
     private static final int FLOOR = 150;
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
@@ -78,6 +77,7 @@ public class ManualControlOp extends OpMode {
 
         loopCounter = loopCounter + 1;
 
+        driver_controlSideways();
         driver_controlDriveMotors();
         operator_controlPaddles();
         operator_controlBlockLift();
@@ -141,21 +141,37 @@ public class ManualControlOp extends OpMode {
         robot.motorDriveRight.setPower(scaleOutput(-gamepad1.right_stick_y));
         robot.motorDriveLeft.setPower(scaleOutput(-gamepad1.left_stick_y));
 
-//        Log.i(KEY,"gamepad1.right_stick_y" + -gamepad1.right_stick_y);
-//        Log.i(KEY, "WHEELS: [" + robot.motorDriveRight.getDirection()+ ": " +
-//                String.format("%.0f", robot.motorDriveRight.getPower() * 100) + "]---[" +
-//                robot.motorDriveRight.getDirection()+ ": " +String.format("%.0f", robot.motorDriveLeft.getPower() * 100) + "]");
+    }
+
+    private void driver_controlSideways() {
+
+        if (gamepad1.a) {
+            robot.motorRobotLift.setPower(-.5);
+        } else if (gamepad1.y) {
+            robot.motorRobotLift.setPower(.5);
+        } else {
+            robot.motorRobotLift.setPower(0);
+        }
+
+        if (gamepad1.dpad_right) {
+            robot.motorRobotSideways.setPower(-.5);
+        } else if (gamepad1.dpad_left) {
+            robot.motorRobotSideways.setPower(.5);
+
+        } else {
+            robot.motorRobotSideways.setPower(0);
+        }
 
     }
 
+
     private float conditionsPower(float input) {
 
-        if( Math.abs(input) < .5) {
+        if (Math.abs(input) < .5) {
             return input / 5;
         }
         return input;
     }
-
 
 
     private float limitValue(float input) {
@@ -189,7 +205,7 @@ public class ManualControlOp extends OpMode {
      */
     double scaleOutput(float inputValue) {
 
-        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, 1 , 1 };
+        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, 1, 1};
         // get the corresponding index for the scaleOutput array.
         int index = (int) (inputValue * 16.0);
         if (index < 0) {
