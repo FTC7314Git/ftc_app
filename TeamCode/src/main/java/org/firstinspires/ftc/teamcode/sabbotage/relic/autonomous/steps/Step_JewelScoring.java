@@ -36,6 +36,8 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     @Override
     public void runStep() {
 
+        robot.runWithEncoders_MAINTAINS_SPEED();
+
         if (robot.isStillWaiting()) return;
 
         lowerJewelArm_runsOnlyOnce();
@@ -96,7 +98,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (displaceJewelDoneFlag == false) {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(2000);
+            robot.setTimeDelay(200);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -109,13 +111,12 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (this.teamColor.equals(this.forwardJewelColor)) {
 
             robot.motorDriveRight.setPower(-power);
-            robot.motorDriveLeft.setPower(-power);
+            robot.motorDriveLeft.setPower(+power);
             Log.i(getLogKey(), "driveRobotToDisplaceJewel Backward");
-
 
         } else {
             robot.motorDriveRight.setPower(+power);
-            robot.motorDriveLeft.setPower(+power);
+            robot.motorDriveLeft.setPower(-power);
             Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
         }
     }
@@ -173,7 +174,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private boolean isJewelColorKnown() {
 
-        if (Math.abs(this.voteRed - this.voteBlue) >= 50) {
+        if (Math.abs(this.voteRed - this.voteBlue) >= 10) {
             analyzeVote();
         }
 

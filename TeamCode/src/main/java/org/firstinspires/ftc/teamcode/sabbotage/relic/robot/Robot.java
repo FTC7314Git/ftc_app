@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.sabbotage.relic.robot;
 
-import android.provider.Settings;
 import android.util.Log;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,8 +18,19 @@ public class Robot {
     private HardwareMap hardwareMap;
     public int HARDWARE_DELAY = 30;
 
-    public static final double SERVO_JEWEL_ARM_POSITION_DOWN = 1.0;
-    public static final double SERVO_JEWEL_ARM_POSITION_UP = 1.0;
+    public static final double SERVO_JEWEL_ARM_POSITION_DOWN = .75;
+    public static final double SERVO_JEWEL_ARM_POSITION_UP = 0;
+
+
+    public static final double SERVO_PADDLE_LEFT_OPEN = 0.2;
+    public static final double SERVO_PADDLE_LEFT_RELEASE = 0.45;
+    public static final double SERVO_PADDLE_LEFT_CLOSE = 0.65;
+
+    public static final double SERVO_PADDLE_RIGHT_OPEN = 0.1;
+    public static final double SERVO_PADDLE_RIGHT_RELEASE = 0.35;
+    public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.6;
+
+
 
     private Robot.TeamEnum jewelColor;
 
@@ -43,8 +52,8 @@ public class Robot {
     public DcMotor motorRobotSideways;
 
 
-    public Servo servoRightPaddle;
     public Servo servoLeftPaddle;
+    public Servo servoRightPaddle;
     public Servo servoJewelArm;
 
     public ColorSensor colorSensorJewel;
@@ -73,8 +82,8 @@ public class Robot {
         this.motorRobotLift = this.hardwareMap.dcMotor.get("motorRobotLift");
         this.motorRobotSideways = this.hardwareMap.dcMotor.get("motorRobotSideways");
 
-        this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
+        this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
 
         this.servoJewelArm = hardwareMap.servo.get("servoJewelArm");
 
@@ -117,14 +126,14 @@ public class Robot {
 
     public void resetServos() {
 
-        this.servoLeftPaddle.setDirection(Servo.Direction.FORWARD);
-        this.servoRightPaddle.setDirection(Servo.Direction.REVERSE);
+        this.servoRightPaddle.setDirection(Servo.Direction.FORWARD);
+        this.servoLeftPaddle.setDirection(Servo.Direction.REVERSE);
         this.servoJewelArm.setDirection(Servo.Direction.FORWARD);
 
 
         this.servoJewelArm.setPosition(0.0);
-//        this.servoLeftPaddle.setPosition(0.0);
-//        this.servoRightPaddle.setPosition(0.1);
+//        this.servoRightPaddle.setPosition(0.0);
+//        this.servoLeftPaddle.setPosition(0.1);
     }
 
     public void setDriveMotorForwardDirection() {
@@ -236,6 +245,12 @@ public class Robot {
         REVERSE
     }
 
+    public enum PaddlePosition {
+
+        OPEN,
+
+        CLOSE
+    }
 
     public enum MotorPowerEnum {
 

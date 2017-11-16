@@ -13,15 +13,6 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
 
-    private static final double SERVO_PADDLE_RIGHT_OPEN = 0.2;
-    private static final double SERVO_PADDLE_RIGHT_RELEASE = 0.55;
-    private static final double SERVO_PADDLE_RIGHT_CLOSE = 0.75;
-
-    private static final double SERVO_PADDLE_LEFT_OPEN = 0.1;
-    private static final double SERVO_PADDLE_LEFT_RELEASE = 0.35;
-    private static final double SERVO_PADDLE_LEFT_CLOSE = 0.55;
-
-
     private static final int FLOOR = 150;
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
@@ -77,11 +68,22 @@ public class ManualControlOp extends OpMode {
 
         loopCounter = loopCounter + 1;
 
+
+//        test_servo();
         driver_controlSideways();
-        driver_controlDriveMotors();
+        driver_controlDriveMotors_Tank();
         operator_controlPaddles();
         operator_controlBlockLift();
     }
+
+    private void test_servo() {
+
+        Log.i(KEY+ "test", "test_servo : " + gamepad2.left_stick_y);
+
+            robot.servoJewelArm.setPosition(gamepad2.left_stick_y);
+        }
+
+
 
     private void operator_controlBlockLift() {
 
@@ -111,21 +113,19 @@ public class ManualControlOp extends OpMode {
 
     private void operator_controlPaddles() {
 
-        Log.i(KEY, "Right Servo: " + robot.servoRightPaddle.getPosition());
-
         if (gamepad2.x) {
-            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_RELEASE);
-            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_RELEASE);
+            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_RELEASE);
+            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_RELEASE);
         }
 
         if (gamepad2.b) {
-            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_CLOSE);
-            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_CLOSE);
+            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_CLOSE);
+            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
         }
 
         if (gamepad2.y) {
-            robot.servoLeftPaddle.setPosition(SERVO_PADDLE_LEFT_OPEN);
-            robot.servoRightPaddle.setPosition(SERVO_PADDLE_RIGHT_OPEN);
+            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
+            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_OPEN);
         }
 
     }
@@ -136,10 +136,23 @@ public class ManualControlOp extends OpMode {
 //        return Math.abs(distanceEncoderCounts - robot.motorBlockLift.getCurrentPosition());
 //    }
 
-    private void driver_controlDriveMotors() {
+    private void driver_controlDriveMotors_Tank() {
 
         robot.motorDriveRight.setPower(scaleOutput(-gamepad1.right_stick_y));
         robot.motorDriveLeft.setPower(scaleOutput(-gamepad1.left_stick_y));
+
+    }
+
+    private void driver_controlDriveMotors_Arcade() {
+
+        double forward = scaleOutput(-gamepad1.right_stick_y);
+        double turn = scaleOutput(-gamepad1.right_stick_x) / 2;
+
+        double right = forward + turn;
+        double left = forward - turn;
+
+        robot.motorDriveRight.setPower((double) limitValue((float) right));
+        robot.motorDriveLeft.setPower((double) limitValue((float) left));
 
     }
 
@@ -153,12 +166,18 @@ public class ManualControlOp extends OpMode {
             robot.motorRobotLift.setPower(0);
         }
 
-        if (gamepad1.dpad_right) {
+        Log.i(KEY, "x: " + gamepad1.left_stick_x);
+
+
+        if (gamepad1.left_stick_x < -0.4f) {
+            Log.i(KEY, "x: < 0.4" + gamepad1.left_stick_x);
             robot.motorRobotSideways.setPower(-.5);
-        } else if (gamepad1.dpad_left) {
+        } else if (gamepad1.left_stick_x > 0.4f) {
+            Log.i(KEY, "x: > 0.4" + gamepad1.left_stick_x);
             robot.motorRobotSideways.setPower(.5);
 
         } else {
+            Log.i(KEY, "x: cleared " + gamepad1.left_stick_x);
             robot.motorRobotSideways.setPower(0);
         }
 

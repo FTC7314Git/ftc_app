@@ -47,7 +47,9 @@ public class AutoBlueLeft extends AutonomousOp {
     protected ArrayList<StepInterface> definedStepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
         definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+        definedStepList.add(new Step_TurnRight(90));
 //        definedStepList.add(new Step_ReadVuMark());
 //        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
 //        definedStepList.add(new Step_TurnLeft(90));
