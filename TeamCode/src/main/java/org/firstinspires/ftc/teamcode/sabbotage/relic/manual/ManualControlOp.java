@@ -169,18 +169,17 @@ public class ManualControlOp extends OpMode {
         Log.i(KEY, "x: " + gamepad1.left_stick_x);
 
 
-        if (gamepad1.left_stick_x < -0.4f) {
-            Log.i(KEY, "x: < 0.4" + gamepad1.left_stick_x);
+        if (gamepad1.left_bumper) {
+            Log.i(KEY, "left_bumper Sideways" );
             robot.motorRobotSideways.setPower(-.5);
-        } else if (gamepad1.left_stick_x > 0.4f) {
-            Log.i(KEY, "x: > 0.4" + gamepad1.left_stick_x);
+        } else if (gamepad1.right_bumper) {
+            Log.i(KEY, "right_bumper Sideways");
             robot.motorRobotSideways.setPower(.5);
 
         } else {
-            Log.i(KEY, "x: cleared " + gamepad1.left_stick_x);
+            Log.i(KEY, "cleared Sideways");
             robot.motorRobotSideways.setPower(0);
         }
-
     }
 
 

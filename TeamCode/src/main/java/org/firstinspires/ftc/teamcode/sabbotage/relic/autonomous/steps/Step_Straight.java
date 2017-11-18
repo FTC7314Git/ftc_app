@@ -31,7 +31,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
         this.distanceEncoderCounts = distanceEncoderCounts;
         this.direction = direction;
-        this.motorPowerEnum = Robot.MotorPowerEnum.High;
+        this.motorPowerEnum = Robot.MotorPowerEnum.Low;
     }
 
 
@@ -66,7 +66,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     }
     private DcMotor getEncoderMotor() {
 
-        return robot.motorDriveRight;
+        return robot.motorDriveLeft;
 
     }
     private void goStraight() {
@@ -193,9 +193,9 @@ public class Step_Straight implements AutonomousOp.StepInterface {
         String key = getLogKey() + keySuffix;
 
         Log.i(key, "--------------------------------------------------------------------------------------");
-        Log.i(key, " CurrentPosition:" + robot.motorDriveRight.getCurrentPosition() + " --- " + robot.motorDriveLeft.getCurrentPosition());
+        Log.i(key, " CurrentPosition: RIGHT:" + robot.motorDriveRight.getCurrentPosition() + " --- LEFT:" + robot.motorDriveLeft.getCurrentPosition());
         Log.i(key, "----------------------");
-        Log.i(key, " speed:" + robot.motorDriveLeft.getPower() + " --- " + robot.motorDriveRight.getPower());
+        Log.i(key, " speed: RIGHT" + robot.motorDriveRight.getPower() + " --- LEFT:" + robot.motorDriveLeft.getPower());
         Log.i(key, "--------------------------------------------------------------------------------------");
     }
 

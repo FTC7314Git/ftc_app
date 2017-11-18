@@ -39,20 +39,23 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoRedLeft", group = "Red")
-public class AutoRedLeft extends AutonomousOp {
+@Autonomous(name = "AutoBlue7314", group = "Blue")
+public class AutoBlue extends AutonomousOp {
 
 
     @Override
     protected ArrayList<StepInterface> definedStepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
-        definedStepList.add(new Step_ReadVuMark());
-        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
-        definedStepList.add(new Step_TurnLeft(90));
-        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
-        definedStepList.add(new Step_TurnRight(90));
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
+        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+//        definedStepList.add(new Step_Straight(40, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_TurnRight(90));
+//        definedStepList.add(new Step_ReadVuMark());
+//        definedStepList.add(new Step_TurnLeft(90));
+//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_TurnLeft(90));
+//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
         
         return definedStepList;
 

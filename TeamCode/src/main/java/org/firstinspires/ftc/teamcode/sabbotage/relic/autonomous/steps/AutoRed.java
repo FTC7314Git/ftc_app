@@ -39,8 +39,8 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoRedRight", group = "Red")
-public class AutoRedRight extends AutonomousOp {
+@Autonomous(name = "AutoRed7314", group = "Red")
+public class AutoRed extends AutonomousOp {
 
 
     @Override
@@ -49,6 +49,8 @@ public class AutoRedRight extends AutonomousOp {
 
         definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
         definedStepList.add(new Step_ReadVuMark());
+        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
+        definedStepList.add(new Step_TurnLeft(90));
         definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
         definedStepList.add(new Step_TurnRight(90));
 

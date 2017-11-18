@@ -12,8 +12,12 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     private boolean lowerJewelArmDoneFlag;
     private boolean raiseJewelArmDoneFlag;
     private boolean displaceJewelDoneFlag;
+    private boolean returnRobotToStartPositionDoneFlag;
     private Robot.TeamEnum teamColor;
     private Robot.TeamEnum forwardJewelColor;
+
+
+    private Robot.DirectionEnum robotMovedDirection;
 
     private int voteRed = 0;
     private int voteBlue = 0;
@@ -52,6 +56,9 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             raiseJewelArm_runsOnlyOnce();
         }
 
+        if (isJewelArmRaised()) {
+            returnRobotToStartPosition_runsOnlyOnce();
+        }
 
     }
 
@@ -62,7 +69,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (lowerJewelArmDoneFlag == false) {
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_DOWN);
             lowerJewelArmDoneFlag = true;
-            robot.setTimeDelay(2000);
+            robot.setTimeDelay(2500);
             Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce");
 
         }
@@ -98,11 +105,24 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (displaceJewelDoneFlag == false) {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(200);
+            robot.setTimeDelay(300);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
 
+
+    private void returnRobotToStartPosition_runsOnlyOnce() {
+
+        if (robot.isStillWaiting()) return;
+
+
+        if (returnRobotToStartPositionDoneFlag == false) {
+            driveRobotReturnToStartPosition();
+            returnRobotToStartPositionDoneFlag = true;
+            robot.setTimeDelay(350);
+            Log.i(getLogKey(), "returnRobotToStartPosition_runsOnlyOnce");
+        }
+    }
 
     private void driveRobotToDisplaceJewel() {
 
@@ -112,14 +132,38 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
             robot.motorDriveRight.setPower(-power);
             robot.motorDriveLeft.setPower(+power);
-            Log.i(getLogKey(), "driveRobotToDisplaceJewel Backward");
+            this.robotMovedDirection = Robot.DirectionEnum.REVERSE;
+            Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE");
 
         } else {
             robot.motorDriveRight.setPower(+power);
             robot.motorDriveLeft.setPower(-power);
+            this.robotMovedDirection = Robot.DirectionEnum.FORWARD;
             Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
         }
     }
+
+
+    private void driveRobotReturnToStartPosition() {
+
+        double power = .2;
+
+        if (Robot.DirectionEnum.FORWARD.equals(this.robotMovedDirection)) {
+
+            robot.motorDriveRight.setPower(-power);
+            robot.motorDriveLeft.setPower(+power);
+            Log.i(getLogKey(), "driveRobotReturnToStartPosition Backward");
+
+        } else {
+            robot.motorDriveRight.setPower(+power);
+            robot.motorDriveLeft.setPower(-power);
+            Log.i(getLogKey(), "driveRobotReturnToStartPosition forward");
+        }
+    }
+
+
+
+
 
     @Override
     public boolean isStepDone() {
@@ -127,7 +171,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (robot.isStillWaiting()) return false;
 
 
-        if (raiseJewelArmDoneFlag) {
+        if (this.returnRobotToStartPositionDoneFlag) {
             Log.i(getLogKey(), "Step is Done:");
             return true;
         }
@@ -185,6 +229,10 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private boolean isJewelDisplaced() {
         return this.displaceJewelDoneFlag && !robot.isStillWaiting();
+    }
+
+    private boolean isJewelArmRaised() {
+        return this.raiseJewelArmDoneFlag && !robot.isStillWaiting();
     }
 
     private int readRedColor() {
