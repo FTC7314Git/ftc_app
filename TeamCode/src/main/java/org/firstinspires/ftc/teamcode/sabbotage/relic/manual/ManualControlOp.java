@@ -20,6 +20,9 @@ public class ManualControlOp extends OpMode {
     private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR;
 
 
+
+
+
     boolean resetBlockLiftDoneFlag;
     private int targetBlockLiftPosition = 0;
 
@@ -71,7 +74,7 @@ public class ManualControlOp extends OpMode {
 
 //        test_servo();
         driver_controlSideways();
-        driver_controlDriveMotors_Tank();
+        driver_controlDriveMotors_Arcade();
         operator_controlPaddles();
         operator_controlBlockLift();
     }
@@ -116,6 +119,7 @@ public class ManualControlOp extends OpMode {
         if (gamepad2.x) {
             robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_RELEASE);
             robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_RELEASE);
+            robot.servoBlockPush.setPosition(Robot.SERVO_BLOCK_PUSH_OUT);
         }
 
         if (gamepad2.b) {
@@ -126,6 +130,13 @@ public class ManualControlOp extends OpMode {
         if (gamepad2.y) {
             robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
             robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_OPEN);
+        }
+
+        if (gamepad2.a) {
+            robot.servoBlockPush.setPosition(Robot.SERVO_BLOCK_PUSH_OUT);
+        }
+        if (!gamepad2.a && !gamepad2.x) {
+            robot.servoBlockPush.setPosition(Robot.SERVO_BLOCK_PUSH_IN);
         }
 
     }
@@ -145,8 +156,8 @@ public class ManualControlOp extends OpMode {
 
     private void driver_controlDriveMotors_Arcade() {
 
-        double forward = scaleOutput(-gamepad1.right_stick_y);
-        double turn = scaleOutput(-gamepad1.right_stick_x) / 2;
+        double forward = scaleOutput(-gamepad1.left_stick_y);
+        double turn = scaleOutput(-gamepad1.right_stick_x) /1;
 
         double right = forward + turn;
         double left = forward - turn;
@@ -223,7 +234,7 @@ public class ManualControlOp extends OpMode {
      */
     double scaleOutput(float inputValue) {
 
-        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, 1, 1};
+        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, .6, .6};
         // get the corresponding index for the scaleOutput array.
         int index = (int) (inputValue * 16.0);
         if (index < 0) {

@@ -30,6 +30,12 @@ public class Robot {
     public static final double SERVO_PADDLE_RIGHT_RELEASE = 0.35;
     public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.6;
 
+    public static final double SERVO_BLOCK_PUSH_OUT = 0.7;
+    public static final double SERVO_BLOCK_PUSH_IN;
+
+    static {
+        SERVO_BLOCK_PUSH_IN = 0;
+    }
 
 
     private Robot.TeamEnum jewelColor;
@@ -55,6 +61,8 @@ public class Robot {
     public Servo servoLeftPaddle;
     public Servo servoRightPaddle;
     public Servo servoJewelArm;
+
+    public Servo servoBlockPush;
 
     public ColorSensor colorSensorJewel;
     public DistanceSensor distanceSensorJewel;
@@ -87,7 +95,9 @@ public class Robot {
 
         this.servoJewelArm = hardwareMap.servo.get("servoJewelArm");
 
-        this.gyroSensor = this.hardwareMap.get(ModernRoboticsI2cGyro.class, "gyroSensor");
+        this.servoBlockPush = hardwareMap.servo.get("servoBlockPush");
+
+//        this.gyroSensor = this.hardwareMap.get(ModernRoboticsI2cGyro.class, "gyroSensor");
 
         this.colorSensorJewel = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
         this.distanceSensorJewel = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");
