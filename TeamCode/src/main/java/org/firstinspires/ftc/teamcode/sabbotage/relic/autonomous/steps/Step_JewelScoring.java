@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
@@ -40,7 +42,8 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     @Override
     public void runStep() {
 
-        robot.runWithEncoders_MAINTAINS_SPEED();
+        robot.motorDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         if (robot.isStillWaiting()) return;
 
@@ -60,6 +63,11 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             returnRobotToStartPosition_runsOnlyOnce();
         }
 
+    }
+
+    private void logEncoders() {
+
+        Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition() + " --- LEFT:" + robot.motorDriveLeft.getCurrentPosition());
     }
 
     private void lowerJewelArm_runsOnlyOnce() {
@@ -105,7 +113,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (displaceJewelDoneFlag == false) {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(300);
+            robot.setTimeDelay(2000);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -119,25 +127,28 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (returnRobotToStartPositionDoneFlag == false) {
             driveRobotReturnToStartPosition();
             returnRobotToStartPositionDoneFlag = true;
-            robot.setTimeDelay(350);
+            robot.setTimeDelay(2000);
             Log.i(getLogKey(), "returnRobotToStartPosition_runsOnlyOnce");
         }
     }
 
     private void driveRobotToDisplaceJewel() {
 
-        double power = .2;
+        double power = .3;
 
         if (this.teamColor.equals(this.forwardJewelColor)) {
-
-            robot.motorDriveRight.setPower(-power);
-            robot.motorDriveLeft.setPower(+power);
+            robot.motorDriveRight.setTargetPosition(-300);
+            robot.motorDriveLeft.setTargetPosition(0);
+            robot.motorDriveRight.setPower(power);
+            robot.motorDriveLeft.setPower(power);
             this.robotMovedDirection = Robot.DirectionEnum.REVERSE;
             Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE");
 
         } else {
-            robot.motorDriveRight.setPower(+power);
-            robot.motorDriveLeft.setPower(-power);
+            robot.motorDriveRight.setTargetPosition(+300);
+            robot.motorDriveLeft.setTargetPosition(0);
+            robot.motorDriveRight.setPower(power);
+            robot.motorDriveLeft.setPower(power);
             this.robotMovedDirection = Robot.DirectionEnum.FORWARD;
             Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
         }
@@ -146,17 +157,21 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     private void driveRobotReturnToStartPosition() {
 
-        double power = .2;
+        double power = .3;
 
         if (Robot.DirectionEnum.FORWARD.equals(this.robotMovedDirection)) {
 
-            robot.motorDriveRight.setPower(-power);
-            robot.motorDriveLeft.setPower(+power);
+            robot.motorDriveRight.setTargetPosition(0);
+            robot.motorDriveLeft.setTargetPosition(0);
+            robot.motorDriveRight.setPower(power);
+            robot.motorDriveLeft.setPower(power);;
             Log.i(getLogKey(), "driveRobotReturnToStartPosition Backward");
 
         } else {
-            robot.motorDriveRight.setPower(+power);
-            robot.motorDriveLeft.setPower(-power);
+            robot.motorDriveRight.setTargetPosition(0);
+            robot.motorDriveLeft.setTargetPosition(0);
+            robot.motorDriveRight.setPower(power);
+            robot.motorDriveLeft.setPower(power);;
             Log.i(getLogKey(), "driveRobotReturnToStartPosition forward");
         }
     }
@@ -167,10 +182,9 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     @Override
     public boolean isStepDone() {
-
         if (robot.isStillWaiting()) return false;
 
-
+        logEncoders();
         if (this.returnRobotToStartPositionDoneFlag) {
             Log.i(getLogKey(), "Step is Done:");
             return true;

@@ -44,7 +44,6 @@ import org.firstinspires.ftc.robotcontroller.external.samples.sabbotage.vortex.r
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoDrifter", group = "Red")
 @Disabled
 public class AutoDrifter extends AutonomousOp {
 

@@ -20,9 +20,6 @@ public class ManualControlOp extends OpMode {
     private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR;
 
 
-
-
-
     boolean resetBlockLiftDoneFlag;
     private int targetBlockLiftPosition = 0;
 
@@ -40,11 +37,11 @@ public class ManualControlOp extends OpMode {
         this.robot = new Robot(hardwareMap, telemetry);
 
         init_ResetBlockLift_onlyRunsOnce();
-//        init_InitEncoders();
+        init_InitEncoders();
     }
 
     private void init_InitEncoders() {
-        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.runWithEncoders_MAINTAINS_SPEED();
     }
 
     private void init_ResetBlockLift_onlyRunsOnce() {
@@ -142,11 +139,6 @@ public class ManualControlOp extends OpMode {
     }
 
 
-//    private int getRemainingDistance() {
-//
-//        return Math.abs(distanceEncoderCounts - robot.motorBlockLift.getCurrentPosition());
-//    }
-
     private void driver_controlDriveMotors_Tank() {
 
         robot.motorDriveRight.setPower(scaleOutput(-gamepad1.right_stick_y));
@@ -234,7 +226,7 @@ public class ManualControlOp extends OpMode {
      */
     double scaleOutput(float inputValue) {
 
-        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .35, .4, .6, .6};
+        double[] scaleArray = {.0, .05, .1, .15, .2, .25, .25, .25, .25, .25, .25, .3, .3, .4, .5, .8, .8};
         // get the corresponding index for the scaleOutput array.
         int index = (int) (inputValue * 16.0);
         if (index < 0) {

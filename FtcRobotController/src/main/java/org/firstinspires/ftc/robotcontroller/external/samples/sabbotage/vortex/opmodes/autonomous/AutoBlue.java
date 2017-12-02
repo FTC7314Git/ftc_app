@@ -45,7 +45,6 @@ import org.firstinspires.ftc.robotcontroller.external.samples.sabbotage.vortex.r
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoBlue", group = "Blue")
 @Disabled
 public class AutoBlue extends AutonomousOp {
 
