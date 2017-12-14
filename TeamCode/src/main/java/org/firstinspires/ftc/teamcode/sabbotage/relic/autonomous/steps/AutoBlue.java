@@ -49,14 +49,15 @@ public class AutoBlue extends AutonomousOp {
 
         definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
         definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
-//        definedStepList.add(new Step_Straight(40, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.FORWARD));
 //        definedStepList.add(new Step_TurnRight(90));
 //        definedStepList.add(new Step_ReadVuMark());
 //        definedStepList.add(new Step_TurnLeft(90));
 //        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
 //        definedStepList.add(new Step_TurnLeft(90));
 //        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
-        
+
         return definedStepList;
 
     }

@@ -31,7 +31,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
         this.distanceEncoderCounts = distanceEncoderCounts;
         this.direction = direction;
-        this.motorPowerEnum = Robot.MotorPowerEnum.Low;
+        this.motorPowerEnum = Robot.MotorPowerEnum.Med;
     }
 
 
