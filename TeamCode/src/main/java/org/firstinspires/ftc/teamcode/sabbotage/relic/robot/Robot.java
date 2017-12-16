@@ -73,6 +73,9 @@ public class Robot {
     public ColorSensor colorSensorJewel;
     public DistanceSensor distanceSensorJewel;
 
+    public ColorSensor colorSensorCrypt;
+    public DistanceSensor distanceSensorCrypt;
+
     public BNO055IMU imu;
     public Orientation angles;
 
@@ -109,6 +112,9 @@ public class Robot {
 
         this.colorSensorJewel = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
         this.distanceSensorJewel = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");
+
+        this.colorSensorCrypt = hardwareMap.get(ColorSensor.class, "colorDistanceCrypt");
+        this.distanceSensorCrypt = hardwareMap.get(DistanceSensor.class, "colorDistanceCrypt");
 
         resetHardwarePositions();
     }

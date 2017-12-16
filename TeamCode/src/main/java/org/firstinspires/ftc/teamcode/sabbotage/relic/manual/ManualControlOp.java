@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 @TeleOp(name = "ManualRobot", group = "Concept")
@@ -74,15 +75,15 @@ public class ManualControlOp extends OpMode {
         driver_controlDriveMotors_Arcade();
         operator_controlPaddles();
         operator_controlBlockLift();
+        ultraPlasmaDetectinator();
     }
 
-    private void test_servo() {
+    private void ultraPlasmaDetectinator() {
 
-        Log.i(KEY+ "test", "test_servo : " + gamepad2.left_stick_y);
-
-            robot.servoJewelArm.setPosition(gamepad2.left_stick_y);
-        }
-
+        Log.i(  "test", "ultraPlasmaDetectinator : " +
+                robot.distanceSensorCrypt.getDistance(DistanceUnit.CM)
+                + "     " + robot.colorSensorCrypt.blue());
+    }
 
 
     private void operator_controlBlockLift() {
@@ -149,7 +150,7 @@ public class ManualControlOp extends OpMode {
     private void driver_controlDriveMotors_Arcade() {
 
         double forward = scaleOutput(-gamepad1.left_stick_y);
-        double turn = scaleOutput(-gamepad1.right_stick_x) /1;
+        double turn = scaleOutput(-gamepad1.right_stick_x) / 1;
 
         double right = forward + turn;
         double left = forward - turn;
@@ -173,7 +174,7 @@ public class ManualControlOp extends OpMode {
 
 
         if (gamepad1.left_bumper) {
-            Log.i(KEY, "left_bumper Sideways" );
+            Log.i(KEY, "left_bumper Sideways");
             robot.motorRobotSideways.setPower(-.5);
         } else if (gamepad1.right_bumper) {
             Log.i(KEY, "right_bumper Sideways");
