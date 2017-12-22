@@ -19,7 +19,7 @@ public class Step_TurnLeft extends Step_TurnRight {
     protected double remainingAngle() {
 
 
-        return this.targetAngle - robot.gyroSensor.getIntegratedZValue();
+        return Math.abs(this.targetAngle - robot.getAngle());
     }
 
 
@@ -28,6 +28,11 @@ public class Step_TurnLeft extends Step_TurnRight {
 
         return -super.determinePower();
 
+    }
+
+    @Override
+    protected boolean hasOverShotTargetAngle() {
+        return false;
     }
 
 }

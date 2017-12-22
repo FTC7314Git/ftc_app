@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -16,7 +15,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 public class Robot {
 
@@ -37,12 +38,7 @@ public class Robot {
     public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.6;
 
     public static final double SERVO_BLOCK_PUSH_OUT = 0.7;
-    public static final double SERVO_BLOCK_PUSH_IN;
-
-    static {
-        SERVO_BLOCK_PUSH_IN = 0;
-    }
-
+    public static final double SERVO_BLOCK_PUSH_IN = 0;
 
     private Robot.TeamEnum jewelColor;
 
@@ -79,7 +75,6 @@ public class Robot {
     public BNO055IMU imu;
     public Orientation angles;
 
-    public ModernRoboticsI2cGyro gyroSensor;
     private RelicRecoveryVuMark vuMark = null;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -117,6 +112,7 @@ public class Robot {
         this.distanceSensorCrypt = hardwareMap.get(DistanceSensor.class, "colorDistanceCrypt");
 
         resetHardwarePositions();
+        setupIMU();
     }
 
     public HardwareMap getHardwareMap() {
@@ -231,6 +227,8 @@ public class Robot {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
@@ -245,6 +243,13 @@ public class Robot {
 
     public void setJewelColor(TeamEnum jewelColor) {
         this.jewelColor = jewelColor;
+    }
+
+    public float getAngle() {
+        if(angles.firstAngle < 0) {
+            return angles.firstAngle + 360F;
+        }
+        return angles.firstAngle;
     }
 
 

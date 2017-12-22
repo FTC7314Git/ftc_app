@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -143,6 +145,7 @@ public class SensorBNO055IMU extends LinearOpMode
         telemetry.addLine()
             .addData("heading", new Func<String>() {
                 @Override public String value() {
+                    Log.i("chickentenders", "angle:" + getAngle());
                     return formatAngle(angles.angleUnit, angles.firstAngle);
                     }
                 })
@@ -174,14 +177,22 @@ public class SensorBNO055IMU extends LinearOpMode
     }
 
     //----------------------------------------------------------------------------------------------
-    // Formatting
+    // Formatting...
     //----------------------------------------------------------------------------------------------
 
     String formatAngle(AngleUnit angleUnit, double angle) {
+
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }
 
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
-}
+        public float getAngle() {
+            if(angles.firstAngle < 0) {
+                return angles.firstAngle + 360F;
+            }
+            return angles.firstAngle;
+        }
+
+    }
