@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_TurnRight implements AutonomousOp.StepInterface {
+public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
     private static final double TARGET_TOLERANCE = 1;
     private static final int SLOW_MODE_REMAINING_ANGLE = 60;
@@ -23,14 +23,14 @@ public class Step_TurnRight implements AutonomousOp.StepInterface {
 
 
     // Constructor, called to create an instance of this class.
-    public Step_TurnRight(double angleDegrees) {
+    public Step_TurnLeft(double angleDegrees) {
 
         this.targetAngle = angleDegrees;
     }
 
     @Override
     public String getLogKey() {
-        return "Step_TurnRight";
+        return "Step_TurnLeft";
     }
 
 
