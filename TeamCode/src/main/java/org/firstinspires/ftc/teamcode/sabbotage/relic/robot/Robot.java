@@ -300,6 +300,14 @@ public class Robot {
         CLOSE
     }
 
+    public enum RobotLiftPositionEnum {
+
+        UP,
+
+        DOWN
+
+    }
+
     public enum MotorPowerEnum {
 
         LowLow(0.1),

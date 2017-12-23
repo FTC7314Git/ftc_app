@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
+import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,13 @@ public class AutoBlue extends AutonomousOp {
 //        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
 //        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
 //        definedStepList.add(new Step_Straight(3000, Robot.DirectionEnum.FORWARD));
-        definedStepList.add(new Step_TurnRight(180));
+        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+        definedStepList.add(new Step_Straight(1300, Robot.DirectionEnum.REVERSE));
+        definedStepList.add(new Step_TurnReset());
+//        definedStepList.add(new Step_Straight(100, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_Straight(400, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_TurnRight(90));
+//        definedStepList.add(new Step_Straight(100, Robot.DirectionEnum.FORWARD));
 //        definedStepList.add(new Step_TurnRight(270));
 //        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.REVERSE));
 //        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.FORWARD));
