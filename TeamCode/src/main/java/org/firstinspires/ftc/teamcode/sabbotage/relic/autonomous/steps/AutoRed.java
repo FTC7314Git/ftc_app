@@ -51,9 +51,9 @@ public class AutoRed extends AutonomousOp {
         definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
 //        definedStepList.add(new Step_ReadVuMark());
 //        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_TurnLeft(90));
-//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
 //        definedStepList.add(new Step_TurnRight(90));
+//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_TurnLeft(90));
 
         return definedStepList;
 
