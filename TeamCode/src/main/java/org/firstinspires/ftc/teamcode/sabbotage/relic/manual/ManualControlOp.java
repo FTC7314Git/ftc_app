@@ -81,8 +81,8 @@ public class ManualControlOp extends OpMode {
     private void ultraPlasmaDetectinator() {
 
         Log.i(  "test", "ultraPlasmaDetectinator : " +
-                robot.distanceSensorCrypt.getDistance(DistanceUnit.CM)
-                + "     " + robot.colorSensorCrypt.blue());
+                robot.distanceSensorColumn.getDistance(DistanceUnit.CM)
+                + "     " + robot.colorSensorColumn.blue());
     }
 
 

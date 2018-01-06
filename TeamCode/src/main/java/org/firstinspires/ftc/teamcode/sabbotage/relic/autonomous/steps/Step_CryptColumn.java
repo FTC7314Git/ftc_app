@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
@@ -16,13 +17,13 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     private boolean displaceJewelDoneFlag;
     private boolean returnRobotToStartPositionDoneFlag;
     private Robot.TeamEnum teamColor;
-    private Robot.TeamEnum forwardJewelColor;
+    private String currentPosition;
 
 
     private Robot.DirectionEnum robotMovedDirection;
 
-    private int voteRed = 0;
-    private int voteBlue = 0;
+    private int voteColumn = 0;
+    private int voteClear = 0;
 
     private final double SCALE_FACTOR = 255;
 
@@ -51,26 +52,12 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
         // isRobotAtTargetColumn?, then finish.
         //
 
+        robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.motorDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        determineAtCryptColumn();
 
-        if (robot.isStillWaiting()) return;
-
-        lowerJewelArm_runsOnlyOnce();
-
-        determineJewelColor();
-
-        if (isJewelColorKnown()) {
-            displaceJewel_runsOnlyOnce();
-        }
-
-        if (isJewelDisplaced()) {
-            raiseJewelArm_runsOnlyOnce();
-        }
-
-        if (isJewelArmRaised()) {
-            returnRobotToStartPosition_runsOnlyOnce();
+        if (isAtColumn()) {
+            Log.i(getLogKey(), "ROBOT AT COLUMN");
         }
 
     }
@@ -80,147 +67,42 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
         Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition() + " --- LEFT:" + robot.motorDriveLeft.getCurrentPosition());
     }
 
-    private void lowerJewelArm_runsOnlyOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-        if (lowerJewelArmDoneFlag == false) {
-            robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_DOWN);
-            lowerJewelArmDoneFlag = true;
-            robot.setTimeDelay(2500);
-            Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce");
-
-        }
-    }
-
-    private void raiseJewelArm_runsOnlyOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-        if (raiseJewelArmDoneFlag == false) {
-
-            stopRobot();
-
-            robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_UP);
-            raiseJewelArmDoneFlag = true;
-            robot.setTimeDelay(2000);
-            Log.i(getLogKey(), "raiseJewelArm_runsOnlyOnce");
-        }
-    }
-
     private void stopRobot() {
 
-        robot.motorDriveRight.setPower(0);
-        robot.motorDriveLeft.setPower(0);
+        robot.motorRobotSideways.setPower(0);
 
     }
-
-    private void displaceJewel_runsOnlyOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-
-        if (displaceJewelDoneFlag == false) {
-            driveRobotToDisplaceJewel();
-            displaceJewelDoneFlag = true;
-            robot.setTimeDelay(2000);
-            Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
-        }
-    }
-
-
-    private void returnRobotToStartPosition_runsOnlyOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-
-        if (returnRobotToStartPositionDoneFlag == false) {
-            driveRobotReturnToStartPosition();
-            returnRobotToStartPositionDoneFlag = true;
-            robot.setTimeDelay(2000);
-            Log.i(getLogKey(), "returnRobotToStartPosition_runsOnlyOnce");
-        }
-    }
-
-    private void driveRobotToDisplaceJewel() {
-
-        double power = .3;
-
-        if (this.teamColor.equals(this.forwardJewelColor)) {
-            robot.motorDriveRight.setTargetPosition(-300);
-            robot.motorDriveLeft.setTargetPosition(0);
-            robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);
-            this.robotMovedDirection = Robot.DirectionEnum.REVERSE;
-            Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE");
-
-        } else {
-            robot.motorDriveRight.setTargetPosition(+300);
-            robot.motorDriveLeft.setTargetPosition(0);
-            robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);
-            this.robotMovedDirection = Robot.DirectionEnum.FORWARD;
-            Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
-        }
-    }
-
-
-    private void driveRobotReturnToStartPosition() {
-
-        double power = .3;
-
-        if (Robot.DirectionEnum.FORWARD.equals(this.robotMovedDirection)) {
-
-            robot.motorDriveRight.setTargetPosition(0);
-            robot.motorDriveLeft.setTargetPosition(0);
-            robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);;
-            Log.i(getLogKey(), "driveRobotReturnToStartPosition Backward");
-
-        } else {
-            robot.motorDriveRight.setTargetPosition(0);
-            robot.motorDriveLeft.setTargetPosition(0);
-            robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);;
-            Log.i(getLogKey(), "driveRobotReturnToStartPosition forward");
-        }
-    }
-
-
-
-
 
     @Override
     public boolean isStepDone() {
         if (robot.isStillWaiting()) return false;
 
         logEncoders();
-        if (this.returnRobotToStartPositionDoneFlag) {
-            Log.i(getLogKey(), "Step is Done:");
-            return true;
+        if (!isAtColumn()) {
+            return false;
         }
-        return false;
+        Log.i(getLogKey(), "Step is Done:");
+        stopRobot();
+        return true;
     }
 
-    private void determineJewelColor() {
+    private void determineAtCryptColumn() {
 
         if (robot.isStillWaiting()) return;
 
-        if (isJewelColorKnown()) {
+        if (isAtColumn()) {
             return;
         }
 
-        if ( readRedColor() >  readBlueColor()){
+        if (readRedColor() > 10 || readBlueColor() > 10){
 
-            this.voteRed++;
-            Log.i(getLogKey(), "read RED");
+            this.voteColumn++;
+            Log.i(getLogKey(), "read COLUMN");
 
-        }
+        } else {
 
-        if ( readBlueColor() >  readRedColor()){
-
-            this.voteBlue++;
-            Log.i(getLogKey(), "read BLUE");
+            this.voteClear++;
+            Log.i(getLogKey(), "read CLEAR");
 
         }
 
@@ -230,42 +112,34 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     private void analyzeVote() {
 
 
-        if (voteRed > voteBlue) {
-            this.forwardJewelColor = Robot.TeamEnum.RED;
-            Log.i(getLogKey(), "analyzeVote(): Red WINS! " +voteRed + " blue:" + voteBlue );
+        if (voteColumn > voteClear) {
+            this.currentPosition = "column";
+            Log.i(getLogKey(), "analyzeVote(): COLUMN WINS! " + voteColumn + " Clear:" + voteClear);
         }
-        if (voteBlue > voteRed) {
-            this.forwardJewelColor = Robot.TeamEnum.BLUE;
-            Log.i(getLogKey(), "analyzeVote(): Blue WINS!" +voteBlue + " red:" + voteRed );
+        if (voteClear > voteColumn) {
+            this.currentPosition = "clear";
+            Log.i(getLogKey(), "analyzeVote(): CLEAR WINS!" + voteClear + " Column:" + voteColumn);
         }
     }
 
-    private boolean isJewelColorKnown() {
+    private boolean isAtColumn() {
 
-        if (Math.abs(this.voteRed - this.voteBlue) >= 10) {
+        if (Math.abs(this.voteColumn - this.voteClear) >= 10) {
             analyzeVote();
         }
 
-        return this.forwardJewelColor != null;
+        return this.currentPosition != null;
 
-    }
-
-
-    private boolean isJewelDisplaced() {
-        return this.displaceJewelDoneFlag && !robot.isStillWaiting();
-    }
-
-    private boolean isJewelArmRaised() {
-        return this.raiseJewelArmDoneFlag && !robot.isStillWaiting();
     }
 
     private int readRedColor() {
-        double red = this.robot.colorSensorJewel.red() * SCALE_FACTOR;
+        double red = this.robot.colorSensorColumn.red() * SCALE_FACTOR;
+        Log.i(getLogKey(), "COLOR:" + red + " | DISTANCE:" + this.robot.distanceSensorColumn.getDistance(DistanceUnit.CM));
         return (int) red;
     }
 
     private int readBlueColor() {
-        double blue = this.robot.colorSensorJewel.blue() * SCALE_FACTOR;
+        double blue = this.robot.colorSensorColumn.blue() * SCALE_FACTOR;
         return (int) blue;
     }
 
