@@ -28,7 +28,7 @@ public class Step_TurnReset implements AutonomousOp.StepInterface {
 
     @Override
     public String getLogKey() {
-        return "Step_TurnRight";
+        return "Step_TurnReset";
     }
 
 

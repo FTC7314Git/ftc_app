@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 public class Step_Straight implements AutonomousOp.StepInterface {
 
-    private final Integer distanceEncoderCounts;
+    private final Integer targetDistanceEncoderCounts;
     private final Robot.DirectionEnum direction;
     private final Robot.MotorPowerEnum motorPowerEnum;
 
@@ -19,7 +19,8 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     private boolean resetMotors_DoneFlag = false;
     private boolean initializedMotors_DoneFlag = false;
 
-    private final int SLOW_MODE_REMAINING_DISANCE = 1100;
+    private final int SLOW_FINISH_REMAINING_DISANCE = 1100;
+    private final int SLOW_START_DISTANCE = 1000;
 
     private final int DONE_TOLERANCE = 100;
 
@@ -29,7 +30,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     // Constructor, called to create an instance of this class.
     public Step_Straight(Integer distanceEncoderCounts, Robot.DirectionEnum direction) {
 
-        this.distanceEncoderCounts = distanceEncoderCounts;
+        this.targetDistanceEncoderCounts = distanceEncoderCounts;
         this.direction = direction;
         this.motorPowerEnum = Robot.MotorPowerEnum.Med;
     }
@@ -66,7 +67,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     }
     private DcMotor getEncoderMotor() {
 
-        return robot.motorDriveLeft;
+        return robot.motorDriveRight;
 
     }
     private void goStraight() {
@@ -83,11 +84,17 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
 
         int remainingDistance = getRemainingDistance();
+        int traveledDistance = getTraveledDistance();
 
+        if(traveledDistance < SLOW_START_DISTANCE){
 
-        if (remainingDistance < SLOW_MODE_REMAINING_DISANCE) {
+            return limitMinValue(this.motorPowerEnum.getValue() * traveledDistance / SLOW_START_DISTANCE);
 
-            return limitMinValue(this.motorPowerEnum.getValue() * remainingDistance / SLOW_MODE_REMAINING_DISANCE);
+        }
+
+        if (remainingDistance < SLOW_FINISH_REMAINING_DISANCE) {
+
+            return (this.motorPowerEnum.getValue() * remainingDistance / SLOW_FINISH_REMAINING_DISANCE);
         }
 
 
@@ -97,9 +104,9 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
     private double limitMinValue(double input) {
 
-        if (input < .1) {
+        if (input < .05) {
 
-            return .1;
+            return .05;
         }
 
         return input;
@@ -155,7 +162,14 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
         DcMotor encoderMotor = getEncoderMotor();
 
-        return Math.abs(distanceEncoderCounts - encoderMotor.getCurrentPosition());
+        return Math.abs(targetDistanceEncoderCounts - encoderMotor.getCurrentPosition());
+    }
+
+    private int getTraveledDistance() {
+
+        DcMotor encoderMotor = getEncoderMotor();
+
+        return Math.abs(encoderMotor.getCurrentPosition());
     }
 
 
