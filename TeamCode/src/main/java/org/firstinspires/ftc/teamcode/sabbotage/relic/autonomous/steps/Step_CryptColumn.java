@@ -54,6 +54,8 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
 
         robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        robot.motorRobotSideways.setPower(.5);
+
         determineAtCryptColumn();
 
         if (isAtColumn()) {
