@@ -80,13 +80,6 @@ public class Step_LandingGear2 implements AutonomousOp.StepInterface {
 
     }
 
-    private void logEncoders() {
-
-
-        Log.i(getLogKey(), " CurrentPosition: ROBOT LIFT:" + robot.motorRobotLift.getCurrentPosition());
-    }
-
-
     @Override
     public boolean isAborted() {
         return false;

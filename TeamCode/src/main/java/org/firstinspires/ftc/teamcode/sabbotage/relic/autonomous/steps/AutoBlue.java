@@ -47,30 +47,15 @@ public class AutoBlue extends AutonomousOp {
     protected ArrayList<StepInterface> definedStepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-//        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
-//        definedStepList.add(new Step_Straight(3000, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
-//        definedStepList.add(new Step_Straight(2300, Robot.DirectionEnum.REVERSE));
-//        definedStepList.add(new Step_TurnReset());
-        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.DOWN));
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
+        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+        definedStepList.add(new Step_Straight(3000, Robot.DirectionEnum.REVERSE));
+        definedStepList.add(new Step_TurnReset());
+        definedStepList.add(new Step_TurnRight(90));
+        definedStepList.add(new Step_Straight(2000, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.DOWN));
 
-        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.UP));
-//        definedStepList.add(new Step_CryptColumn());
-
-//        definedStepList.add(new Step_Straight(100, Robot.DirectionEnum.REVERSE));
-//        definedStepList.add(new Step_Straight(400, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_TurnRight(90));
-//        definedStepList.add(new Step_Straight(100, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_TurnRight(270));
-//        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.REVERSE));
-//        definedStepList.add(new Step_Straight(4000, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_TurnLeft(90));
-//        definedStepList.add(new Step_ReadVuMark());
-//        definedStepList.add(new Step_TurnRight(90));
-//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_TurnRight(90));
-//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.UP));
 
         return definedStepList;
 
