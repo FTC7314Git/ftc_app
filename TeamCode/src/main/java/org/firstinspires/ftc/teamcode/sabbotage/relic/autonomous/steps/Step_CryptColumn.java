@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+
 
 public class Step_CryptColumn implements AutonomousOp.StepInterface {
 
@@ -17,21 +19,25 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     private boolean displaceJewelDoneFlag;
     private boolean returnRobotToStartPositionDoneFlag;
     private Robot.TeamEnum teamColor;
-    private String currentPosition;
 
+    private RelicRecoveryVuMark currentPositionEnum;
+    private RelicRecoveryVuMark targetPositionEnum;
 
-    private Robot.DirectionEnum robotMovedDirection;
+    private boolean isWaitingForColumnClear;
+
+    private int columnCount;
+
 
     private int voteColumn = 0;
     private int voteClear = 0;
 
     private final double SCALE_FACTOR = 255;
+    private final int BLUE_COLOR_VALUE = 20000;
+    private final int RED_COLOR_VALUE = 20000;
+
 
     // Constructor, called to create an instance of this class.
-    public Step_CryptColumn(Robot.TeamEnum teamColor) {
-
-        this.teamColor = teamColor;
-
+    public Step_CryptColumn() {
 
     }
 
@@ -46,28 +52,125 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     public void runStep() {
 
         // lower sensor arm.
-        // drive left
+        // sideways drive left
         // isRobotAtColumn?, then update currentColumnPosition
         // hasRobotClearedColumn? ( has last readings been false? ), then enable isRobotAtColumn
         // isRobotAtTargetColumn?, then finish.
         //
 
-        robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        logDebugInfo();
+        setTargetColumnPosition_runsOnlyOnce();
 
-        robot.motorRobotSideways.setPower(.5);
+        lowerColumnSensorArm();
 
-        determineAtCryptColumn();
+        robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorRobotSideways.setPower(Robot.MotorPowerEnum.Low.getValue());
+
+        readColorSensorAndVotePosition();
 
         if (isAtColumn()) {
-            Log.i(getLogKey(), "ROBOT AT COLUMN");
+            atColumnEvaluateRobotLocation();
+        } else if (isAtClear()) {
+
+            this.isWaitingForColumnClear = false;
+        }
+
+
+    }
+
+    private void logDebugInfo() {
+
+
+        StringBuilder sb = new StringBuilder();
+
+        if (isWaitingForColumnClear) {
+            sb.append(" Waiting!!! ForColumnClear:" + this.isWaitingForColumnClear);
+        }
+        sb.append(" currentPositionEnum:" + this.currentPositionEnum);
+        sb.append(" voteColumn:" + this.voteColumn);
+        sb.append(" voteClear:" + this.voteClear);
+        Log.i(getLogKey(), sb.toString());
+
+    }
+
+    private void lowerColumnSensorArm() {
+
+        if (robot.isStillWaiting()) return;
+
+        // TODO add servo
+
+    }
+
+
+    public void atColumnEvaluateRobotLocation() {
+
+        if (robot.isStillWaiting() || this.isWaitingForColumnClear) return;
+
+        updateRobotColumnPosition();
+
+
+        if (isAtTargetColumnPosition()) {
+            Log.i(getLogKey(), "At Target Location!!!");
+            stopRobot();
+        } else {
+
+            this.isWaitingForColumnClear = true;
+            resetVoteCounts();
+//            raiseColumnSensorArm();
+//            robot.setTimeDelay(1500);
+
         }
 
     }
 
-    private void logEncoders() {
+    private boolean isAtTargetColumnPosition() {
 
-        Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition() + " --- LEFT:" + robot.motorDriveLeft.getCurrentPosition());
+        return this.targetPositionEnum.equals(this.currentPositionEnum);
+
     }
+
+    private void raiseColumnSensorArm() {
+
+        // TODO maybe....
+
+    }
+
+    private void updateRobotColumnPosition() {
+
+
+        columnCount++;
+
+        if (columnCount == 1) {
+            this.currentPositionEnum = RelicRecoveryVuMark.LEFT;
+        } else if (columnCount == 2) {
+            this.currentPositionEnum = RelicRecoveryVuMark.CENTER;
+        } else if (columnCount == 3) {
+            this.currentPositionEnum = RelicRecoveryVuMark.RIGHT;
+        } else {
+            this.currentPositionEnum = RelicRecoveryVuMark.UNKNOWN;
+        }
+
+
+    }
+
+    private void resetVoteCounts() {
+
+        this.voteClear = 0;
+        this.voteColumn = 0;
+
+    }
+
+
+    private void setTargetColumnPosition_runsOnlyOnce() {
+
+        if (targetPositionEnum == null) {
+
+//            this.targetPositionEnum = robot.getVuMark();
+            this.targetPositionEnum = RelicRecoveryVuMark.RIGHT;
+
+        }
+    }
+
 
     private void stopRobot() {
 
@@ -79,69 +182,74 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     public boolean isStepDone() {
         if (robot.isStillWaiting()) return false;
 
-        logEncoders();
-        if (!isAtColumn()) {
-            return false;
+        if (isAtTargetColumnPosition()) {
+            Log.i(getLogKey(), "Step is Done:");
+            stopRobot();
+            return true;
         }
-        Log.i(getLogKey(), "Step is Done:");
-        stopRobot();
-        return true;
+        return false;
     }
 
-    private void determineAtCryptColumn() {
+    private void readColorSensorAndVotePosition() {
 
         if (robot.isStillWaiting()) return;
 
-        if (isAtColumn()) {
-            return;
-        }
+        if (readRedColor() > RED_COLOR_VALUE | readBlueColor() > BLUE_COLOR_VALUE) {
 
-        if (readRedColor() > 10 || readBlueColor() > 10){
-
-            this.voteColumn++;
-            Log.i(getLogKey(), "read COLUMN");
+            voteColumn();
 
         } else {
 
-            this.voteClear++;
-            Log.i(getLogKey(), "read CLEAR");
+            voteClear();
 
         }
-
 
     }
 
-    private void analyzeVote() {
+    private void voteColumn() {
 
+        if (isWaitingForColumnClear) return;
 
-        if (voteColumn > voteClear) {
-            this.currentPosition = "column";
-            Log.i(getLogKey(), "analyzeVote(): COLUMN WINS! " + voteColumn + " Clear:" + voteClear);
+        this.voteColumn++;
+        this.voteClear = 0;
+//        Log.i(getLogKey(), "read COLUMN");
+
+    }
+
+    private void voteClear() {
+
+        if (this.voteClear < 15) {
+
+            this.voteClear++;
+            this.voteColumn = 0;
+
         }
-        if (voteClear > voteColumn) {
-            this.currentPosition = "clear";
-            Log.i(getLogKey(), "analyzeVote(): CLEAR WINS!" + voteClear + " Column:" + voteColumn);
-        }
+//        Log.i(getLogKey(), "read CLEAR");
+
     }
 
     private boolean isAtColumn() {
 
-        if (Math.abs(this.voteColumn - this.voteClear) >= 10) {
-            analyzeVote();
-        }
+        return (this.voteColumn - this.voteClear) >= 5;
 
-        return this.currentPosition != null;
+    }
+
+    private boolean isAtClear() {
+
+        return (this.voteClear - this.voteColumn) >= 5;
 
     }
 
     private int readRedColor() {
         double red = this.robot.colorSensorColumn.red() * SCALE_FACTOR;
-        Log.i(getLogKey(), "COLOR:" + red + " | DISTANCE:" + this.robot.distanceSensorColumn.getDistance(DistanceUnit.CM));
+        Log.i(getLogKey(), "RED COLOR:" + red + " | DISTANCE:" + this.robot.distanceSensorColumn.getDistance(DistanceUnit.CM));
         return (int) red;
     }
 
     private int readBlueColor() {
         double blue = this.robot.colorSensorColumn.blue() * SCALE_FACTOR;
+        Log.i(getLogKey(), "BLUE COLOR:" + blue + " | DISTANCE:" + this.robot.distanceSensorColumn.getDistance(DistanceUnit.CM));
+
         return (int) blue;
     }
 
