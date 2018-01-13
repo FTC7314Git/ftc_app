@@ -191,7 +191,8 @@ public class Robot {
     public boolean isStillWaiting() {
 
         if (delayUntilLoopCount > loopCounter || delayUntilTimeMilliSeconds > System.currentTimeMillis()) {
-            Log.i("ROBOT", "Waiting..." + loopCounter + "  Waiting..mS." + System.currentTimeMillis());
+            Log.i("ROBOT", "Waiting..." + (delayUntilLoopCount - loopCounter)
+                    + "  Waiting..mS." + (delayUntilTimeMilliSeconds - System.currentTimeMillis()));
             return true;
         }
         return false;
@@ -214,11 +215,11 @@ public class Robot {
     public void setupIMU() {
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -229,7 +230,7 @@ public class Robot {
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
     public RelicRecoveryVuMark getVuMark() {
@@ -246,7 +247,7 @@ public class Robot {
     }
 
     public float getAngle() {
-        if(angles.firstAngle < 0) {
+        if (angles.firstAngle < 0) {
             return angles.firstAngle + 360F;
         }
         return angles.firstAngle;

@@ -75,14 +75,6 @@ public class ManualControlOp extends OpMode {
         driver_controlDriveMotors_Arcade();
         operator_controlPaddles();
         operator_controlBlockLift();
-        ultraPlasmaDetectinator();
-    }
-
-    private void ultraPlasmaDetectinator() {
-
-        Log.i(  "test", "ultraPlasmaDetectinator : " +
-                robot.distanceSensorColumn.getDistance(DistanceUnit.CM)
-                + "     " + robot.colorSensorColumn.blue());
     }
 
 
