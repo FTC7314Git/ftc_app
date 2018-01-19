@@ -5,15 +5,16 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 public class Step_Straight implements AutonomousOp.StepInterface {
 
-    private final Integer targetDistanceEncoderCounts;
-    private final Robot.DirectionEnum direction;
-    private final Robot.MotorPowerEnum motorPowerEnum;
-
+    private Integer targetDistanceEncoderCounts = null;
+    private Robot.DirectionEnum direction = null;
+    private Robot.MotorPowerEnum motorPowerEnum;
+    private Robot.RobotStartPositionEnum robotStartPositionEnum;
     private Robot robot;
 
     private boolean resetMotors_DoneFlag = false;
@@ -25,12 +26,83 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     private final int DONE_TOLERANCE = 100;
 
 
-    private static final double MOTOR_POWER_BALANCE_FACTOR = 1.0;
+    public static int getTargetDistance(Robot.RobotStartPositionEnum robotStartPositionEnum,
+                                        RelicRecoveryVuMark relicRecoveryVuMarkEnum) {
+
+
+        if (Robot.RobotStartPositionEnum.RED_LEFT_SIDE.equals(robotStartPositionEnum)) {
+
+            switch (relicRecoveryVuMarkEnum) {
+                case LEFT:
+                    return 500;
+                case CENTER:
+                    return 600;
+                case RIGHT:
+                    return 800;
+
+
+            }
+        }
+
+        if (Robot.RobotStartPositionEnum.RED_RIGHT_SIDE.equals(robotStartPositionEnum)) {
+
+            switch (relicRecoveryVuMarkEnum) {
+                case LEFT:
+                    return 500;
+                case CENTER:
+                    return 600;
+                case RIGHT:
+                    return 800;
+
+
+            }
+        }
+
+        if (Robot.RobotStartPositionEnum.BLUE_LEFT_SIDE.equals(robotStartPositionEnum)) {
+
+            switch (relicRecoveryVuMarkEnum) {
+                case LEFT:
+                    return 500;
+                case CENTER:
+                    return 600;
+                case RIGHT:
+                    return 800;
+
+
+            }
+        }
+
+        if (Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE.equals(robotStartPositionEnum)) {
+
+            switch (relicRecoveryVuMarkEnum) {
+                case LEFT:
+                    return 500;
+                case CENTER:
+                    return 600;
+                case RIGHT:
+                    return 800;
+
+
+            }
+        }
+
+        return 0;
+    }
 
     // Constructor, called to create an instance of this class.
     public Step_Straight(Integer distanceEncoderCounts, Robot.DirectionEnum direction) {
 
         this.targetDistanceEncoderCounts = distanceEncoderCounts;
+        this.direction = direction;
+        this.motorPowerEnum = Robot.MotorPowerEnum.Med;
+    }
+
+
+    // Constructor, called to create an instance of this class.
+    public Step_Straight(Robot.RobotStartPositionEnum robotStartPositionEnum,
+                         Robot.DirectionEnum direction) {
+
+        this.robotStartPositionEnum = robotStartPositionEnum;
         this.direction = direction;
         this.motorPowerEnum = Robot.MotorPowerEnum.Med;
     }
@@ -42,10 +114,12 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     }
 
 
-
-
     @Override
     public void runStep() {
+
+
+        initializeSetupForVuMarkDistances_Only_Once();
+
 
         resetEncodersAndStopMotors_Only_Once();
 
@@ -65,11 +139,25 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
 
     }
+
+
+    private void initializeSetupForVuMarkDistances_Only_Once() {
+
+        if (this.direction != null) {
+            return;
+        }
+
+        this.targetDistanceEncoderCounts = getTargetDistance(this.robotStartPositionEnum, robot.getVuMark());
+
+    }
+
+
     private DcMotor getEncoderMotor() {
 
         return robot.motorDriveRight;
 
     }
+
     private void goStraight() {
 
         double motorPower = determineMotorPower();
@@ -86,7 +174,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
         int remainingDistance = getRemainingDistance();
         int traveledDistance = getTraveledDistance();
 
-        if(traveledDistance < SLOW_START_DISTANCE){
+        if (traveledDistance < SLOW_START_DISTANCE) {
 
             return limitMinValue(this.motorPowerEnum.getValue() * traveledDistance / SLOW_START_DISTANCE);
 
@@ -104,9 +192,9 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
     private double limitMinValue(double input) {
 
-        if (input < .05) {
+        if (input < .03) {
 
-            return .05;
+            return .03;
         }
 
         return input;
