@@ -63,8 +63,8 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
 
         lowerColumnSensorArm();
 
-        robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorRobotSideways.setPower(Robot.MotorPowerEnum.Low.getValue());
+        robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorRobotSideways.setPower(-Robot.MotorPowerEnum.Low.getValue());
 
         readColorSensorAndVotePosition();
 
@@ -166,7 +166,7 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
         if (targetPositionEnum == null) {
 
 //            this.targetPositionEnum = robot.getVuMark();
-            this.targetPositionEnum = RelicRecoveryVuMark.RIGHT;
+            this.targetPositionEnum = RelicRecoveryVuMark.CENTER;
 
         }
     }

@@ -279,6 +279,18 @@ public class Robot {
         BLUE
     }
 
+    public enum RobotStartPositionEnum {
+
+        RED_RIGHT_SIDE,
+
+        RED_LEFT_SIDE,
+
+        BLUE_RIGHT_SIDE,
+
+        BLUE_LEFT_SIDE,
+
+    }
+
     public enum StrafeEnum {
 
         RIGHT,
