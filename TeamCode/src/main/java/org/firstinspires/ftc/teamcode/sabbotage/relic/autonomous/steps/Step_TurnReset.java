@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 public class Step_TurnReset implements AutonomousOp.StepInterface {
 
-    private static final double TARGET_TOLERANCE = 1;
+    private static final double TARGET_TOLERANCE = .5;
     private static final int SLOW_MODE_REMAINING_ANGLE = 60;
 
     private Robot.MotorPowerEnum motorPowerEnum = Robot.MotorPowerEnum.Med;
@@ -53,24 +53,26 @@ public class Step_TurnReset implements AutonomousOp.StepInterface {
     protected double determinePower() {
 
 
-        double absRemainingAngle = Math.abs(remainingAngle());
+//        double absRemainingAngle = Math.abs(remainingAngle());
+//
+//
+//        if (absRemainingAngle < SLOW_MODE_REMAINING_ANGLE) {
+//
+//            return limitMinValue(this.motorPowerEnum.getValue() * absRemainingAngle / (SLOW_MODE_REMAINING_ANGLE));
+//        }
+//
+//
+//        return this.motorPowerEnum.getValue();
 
-
-        if (absRemainingAngle < SLOW_MODE_REMAINING_ANGLE) {
-
-            return limitMinValue(this.motorPowerEnum.getValue() * absRemainingAngle / (SLOW_MODE_REMAINING_ANGLE));
-        }
-
-
-        return this.motorPowerEnum.getValue();
+        return .03;
 
     }
 
     private double limitMinValue(double input) {
 
-        if (input < .15) {
+        if (input < .03) {
 
-            return .15;
+            return .03;
         }
 
         return input;
@@ -142,7 +144,7 @@ public class Step_TurnReset implements AutonomousOp.StepInterface {
 
         if (isAtTargetAngle()) {
 
-            logIt("isStepDone");
+            Log.i(getLogKey(), "Step is Done at angle:" + robot.getAngle());
 
             robot.motorDriveRight.setPower(0);
             robot.motorDriveLeft.setPower(0);

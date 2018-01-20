@@ -23,7 +23,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     private final int SLOW_FINISH_REMAINING_DISANCE = 1100;
     private final int SLOW_START_DISTANCE = 1000;
 
-    private final int DONE_TOLERANCE = 100;
+    private final int DONE_TOLERANCE = 50;
 
 
     public static int getTargetDistance(Robot.RobotStartPositionEnum robotStartPositionEnum,
@@ -192,9 +192,9 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
     private double limitMinValue(double input) {
 
-        if (input < .03) {
+        if (input < .05) {
 
-            return .03;
+            return .05;
         }
 
         return input;

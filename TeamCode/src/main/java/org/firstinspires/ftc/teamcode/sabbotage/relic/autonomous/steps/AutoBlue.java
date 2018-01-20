@@ -47,15 +47,24 @@ public class AutoBlue extends AutonomousOp {
     protected ArrayList<StepInterface> definedStepList() {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
-        definedStepList.add(new Step_Straight(3000, Robot.DirectionEnum.REVERSE));
-        definedStepList.add(new Step_TurnReset());
-        definedStepList.add(new Step_TurnRight(90));
-        definedStepList.add(new Step_Straight(2000, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.DOWN));
+//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
+//        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+//        definedStepList.add(new Step_Straight(2750, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_TurnRight(270));
+//        definedStepList.add(new Step_Straight(1000, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_CryptColumn());
 
-//        definedStepList.add(new Step_LandingGear2(Robot.RobotLiftPositionEnum.UP));
+
+        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
+        definedStepList.add(new Step_TurnReset());
+        definedStepList.add(new Step_Straight(1800, Robot.DirectionEnum.FORWARD));
+        definedStepList.add(new Step_TurnRight(270));
+        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.FORWARD));
+//
+//        definedStepList.add(new Step_LandingGear(Robot.RobotLiftPositionEnum.DOWN));
+//        definedStepList.add(new Step_CryptColumn());
+
+//        definedStepList.add(new Step_LandingGear(Robot.RobotLiftPositionEnum.UP));
 
         return definedStepList;
 

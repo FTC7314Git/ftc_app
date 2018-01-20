@@ -77,8 +77,8 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (lowerJewelArmDoneFlag == false) {
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_DOWN);
             lowerJewelArmDoneFlag = true;
-            robot.setTimeDelay(2500);
-            Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce");
+            robot.setTimeDelay(500);
+            Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce Robot at Angle:" + robot.getAngle());
 
         }
     }
@@ -93,7 +93,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_UP);
             raiseJewelArmDoneFlag = true;
-            robot.setTimeDelay(2000);
+            robot.setTimeDelay(500);
             Log.i(getLogKey(), "raiseJewelArm_runsOnlyOnce");
         }
     }
@@ -113,7 +113,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (displaceJewelDoneFlag == false) {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(2000);
+            robot.setTimeDelay(1000);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -127,7 +127,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         if (returnRobotToStartPositionDoneFlag == false) {
             driveRobotReturnToStartPosition();
             returnRobotToStartPositionDoneFlag = true;
-            robot.setTimeDelay(2000);
+            robot.setTimeDelay(500);
             Log.i(getLogKey(), "returnRobotToStartPosition_runsOnlyOnce");
         }
     }
@@ -186,7 +186,9 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         logEncoders();
         if (this.returnRobotToStartPositionDoneFlag) {
-            Log.i(getLogKey(), "Step is Done:");
+            Log.i(getLogKey(), "Step is Done at angle:" + robot.getAngle());
+            robot.resetEncodersAndStopMotors();
+
             return true;
         }
         return false;

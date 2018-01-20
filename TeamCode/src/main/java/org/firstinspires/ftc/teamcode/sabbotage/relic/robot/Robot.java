@@ -131,7 +131,8 @@ public class Robot {
         Log.w("ROBOT", "resetEncodersAndStopMotors..." + loopCounter);
         this.motorDriveLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motorDriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        this.motorDriveLeft.setPower(0);
+        this.motorDriveRight.setPower(0);
 
     }
 
@@ -253,6 +254,9 @@ public class Robot {
         return angles.firstAngle;
     }
 
+    public float getAngleOffZero() {
+        return angles.firstAngle;
+    }
 
     public static enum ColorEnum {
 
