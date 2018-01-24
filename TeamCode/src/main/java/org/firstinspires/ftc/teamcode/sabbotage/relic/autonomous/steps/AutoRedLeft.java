@@ -39,16 +39,25 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutoRed", group = "Red")
-public class Tester extends AutonomousOp {
+@Autonomous(name = "AutoRedLeft7314", group = "Red")
+public class AutoRedLeft extends AutonomousOp {
 
 
     @Override
     protected ArrayList<StepInterface> definedStepList() {
+
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
         definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.RED));
+        definedStepList.add(new Step_TurnReset());
+        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.RED_LEFT_SIDE, Robot.DirectionEnum.FORWARD));
 
+
+        definedStepList.add(new Step_TurnRight(285));
+        definedStepList.add(new Step_Straight(250, Robot.DirectionEnum.FORWARD));
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
+        definedStepList.add(new Step_Straight(250, Robot.DirectionEnum.REVERSE));
 
         return definedStepList;
 

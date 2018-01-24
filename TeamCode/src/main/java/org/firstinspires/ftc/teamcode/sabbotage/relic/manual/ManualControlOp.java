@@ -7,14 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 @TeleOp(name = "ManualRobot", group = "Concept")
 public class ManualControlOp extends OpMode {
     private static final String KEY = "Manual";
 
-    private static final int FLOOR = 150;
+    private static final int FLOOR = 280;
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
     private static final int THIRD_FLOOR = SECOND_FLOOR + FLOOR;
@@ -113,13 +112,13 @@ public class ManualControlOp extends OpMode {
         }
 
         if (gamepad2.b) {
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_CLOSE);
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
+            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
+            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_OPEN);
         }
 
         if (gamepad2.y) {
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_OPEN);
+            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_CLOSE);
+            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
         }
 
         if (gamepad2.a) {

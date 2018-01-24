@@ -101,7 +101,7 @@ public class Step_TurnReset implements AutonomousOp.StepInterface {
 
             robot.motorDriveLeft.setPower(+power);
 
-            logIt("Overshot:");
+            logIt("turnRight:");
 
         } else {
 

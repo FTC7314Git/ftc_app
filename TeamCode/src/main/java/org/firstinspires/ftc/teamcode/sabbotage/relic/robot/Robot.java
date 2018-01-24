@@ -29,16 +29,16 @@ public class Robot {
     public static final double SERVO_JEWEL_ARM_POSITION_UP = 0;
 
 
-    public static final double SERVO_PADDLE_LEFT_OPEN = 0.2;
+    public static final double SERVO_PADDLE_LEFT_CLOSE = 0.0;
     public static final double SERVO_PADDLE_LEFT_RELEASE = 0.45;
-    public static final double SERVO_PADDLE_LEFT_CLOSE = 0.65;
+    public static final double SERVO_PADDLE_LEFT_OPEN = 0.65;
 
-    public static final double SERVO_PADDLE_RIGHT_OPEN = 0.1;
+    public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.0;
     public static final double SERVO_PADDLE_RIGHT_RELEASE = 0.35;
-    public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.6;
+    public static final double SERVO_PADDLE_RIGHT_OPEN = 0.6;
 
-    public static final double SERVO_BLOCK_PUSH_OUT = 0.7;
-    public static final double SERVO_BLOCK_PUSH_IN = 0;
+    public static final double SERVO_BLOCK_PUSH_OUT = 0;
+    public static final double SERVO_BLOCK_PUSH_IN = 0.7;
 
     private Robot.TeamEnum jewelColor;
 
@@ -65,6 +65,8 @@ public class Robot {
     public Servo servoJewelArm;
 
     public Servo servoBlockPush;
+
+    public Servo servoColumnArm;
 
     public ColorSensor colorSensorJewel;
     public DistanceSensor distanceSensorJewel;
@@ -103,7 +105,8 @@ public class Robot {
 
         this.servoBlockPush = hardwareMap.servo.get("servoBlockPush");
 
-//        this.gyroSensor = this.hardwareMap.get(ModernRoboticsI2cGyro.class, "gyroSensor");
+        this.servoColumnArm = hardwareMap.servo.get("servoColumnArm");
+
 
         this.colorSensorJewel = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
         this.distanceSensorJewel = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");

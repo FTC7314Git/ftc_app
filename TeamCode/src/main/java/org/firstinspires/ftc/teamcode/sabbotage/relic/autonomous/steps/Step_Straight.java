@@ -34,12 +34,11 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
             switch (relicRecoveryVuMarkEnum) {
                 case LEFT:
-                    return 500;
+                    return 2700;
                 case CENTER:
-                    return 600;
+                    return 2000;
                 case RIGHT:
-                    return 800;
-
+                    return 1600;
 
             }
         }
@@ -62,12 +61,11 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
             switch (relicRecoveryVuMarkEnum) {
                 case LEFT:
-                    return 500;
+                    return 1000;
                 case CENTER:
-                    return 600;
+                    return 1800;
                 case RIGHT:
-                    return 800;
-
+                    return 2000;
 
             }
         }
@@ -75,12 +73,12 @@ public class Step_Straight implements AutonomousOp.StepInterface {
         if (Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE.equals(robotStartPositionEnum)) {
 
             switch (relicRecoveryVuMarkEnum) {
-                case LEFT:
-                    return 500;
-                case CENTER:
-                    return 600;
                 case RIGHT:
-                    return 800;
+                    return 2200;
+                case CENTER:
+                    return 2500;
+                case LEFT:
+                    return 3000;
 
 
             }
@@ -143,12 +141,17 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
     private void initializeSetupForVuMarkDistances_Only_Once() {
 
-        if (this.direction != null) {
+        if (this.targetDistanceEncoderCounts != null) {
             return;
         }
 
+        // TODO, remove this, StepVuMark will set this value.
+        robot.setVuMark(RelicRecoveryVuMark.LEFT);
+
+
         this.targetDistanceEncoderCounts = getTargetDistance(this.robotStartPositionEnum, robot.getVuMark());
 
+        Log.i(getLogKey(), "Start: " + robot.getVuMark() + " for " + this.targetDistanceEncoderCounts);
     }
 
 

@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
@@ -61,7 +64,9 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
         logDebugInfo();
         setTargetColumnPosition_runsOnlyOnce();
 
-        lowerColumnSensorArm();
+        extendColumnSensorArm();
+
+//        processAngleCorrection();
 
         robot.motorRobotSideways.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.motorRobotSideways.setPower(-Robot.MotorPowerEnum.Low.getValue());
@@ -78,7 +83,34 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
 
     }
 
-    private void logDebugInfo() {
+    private void processAngleCorrection() {
+
+        robot.angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        robot.motorDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        Log.i(getLogKey(), "robot.angles:" + robot.getAngle() + "   " + robot.getAngleOffZero());
+
+        float targetAngle = 0f;
+
+        float angle = robot.getAngle();
+
+        if(angle < targetAngle + .5) {
+            robot.motorDriveRight.setPower(.15);
+            robot.motorDriveLeft.setPower(0);
+        } else if (angle < targetAngle - .5){
+            robot.motorDriveRight.setPower(0);
+            robot.motorDriveLeft.setPower(.1);
+        }else{
+            robot.motorDriveRight.setPower(0);
+            robot.motorDriveLeft.setPower(0);
+        }
+
+    }
+
+
+        private void logDebugInfo() {
 
 
         StringBuilder sb = new StringBuilder();
@@ -90,14 +122,6 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
         sb.append(" voteColumn:" + this.voteColumn);
         sb.append(" voteClear:" + this.voteClear);
         Log.i(getLogKey(), sb.toString());
-
-    }
-
-    private void lowerColumnSensorArm() {
-
-        if (robot.isStillWaiting()) return;
-
-        // TODO add servo
 
     }
 
@@ -129,9 +153,15 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
 
     }
 
-    private void raiseColumnSensorArm() {
+    private void extendColumnSensorArm() {
 
-        // TODO maybe....
+        this.robot.servoColumnArm.setPosition(1);
+
+    }
+
+    private void resetColumnSensorArm() {
+
+        this.robot.servoColumnArm.setPosition(0);
 
     }
 
@@ -175,6 +205,7 @@ public class Step_CryptColumn implements AutonomousOp.StepInterface {
     private void stopRobot() {
 
         robot.motorRobotSideways.setPower(0);
+        resetColumnSensorArm();
 
     }
 

@@ -45,9 +45,12 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         robot.motorDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
         if (robot.isStillWaiting()) return;
 
         lowerJewelArm_runsOnlyOnce();
+
+        raiseControlBlockLift();
 
         determineJewelColor();
 
@@ -63,6 +66,18 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             returnRobotToStartPosition_runsOnlyOnce();
         }
 
+    }
+
+    private void raiseControlBlockLift() {
+
+
+        int targetBlockLiftPosition = 150;
+
+        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
+        robot.motorBlockLift.setPower(.6);
+
+        Log.i(getLogKey(), "encoder" + robot.motorBlockLift.getCurrentPosition());
     }
 
     private void logEncoders() {
@@ -137,7 +152,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         double power = .3;
 
         if (this.teamColor.equals(this.forwardJewelColor)) {
-            robot.motorDriveRight.setTargetPosition(-300);
+            robot.motorDriveRight.setTargetPosition(-150);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
             robot.motorDriveLeft.setPower(power);
@@ -145,7 +160,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE");
 
         } else {
-            robot.motorDriveRight.setTargetPosition(+300);
+            robot.motorDriveRight.setTargetPosition(+150);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
             robot.motorDriveLeft.setPower(power);
