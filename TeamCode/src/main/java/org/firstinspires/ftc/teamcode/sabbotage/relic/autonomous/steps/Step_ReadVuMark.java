@@ -21,6 +21,8 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface {
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
 
+    private long startTimeMilliSeconds;
+
     // Constructor, called to create an instance of this class.
     public Step_ReadVuMark() {
     }
@@ -50,6 +52,8 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface {
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
         relicTrackables.activate();
+
+        this.startTimeMilliSeconds = System.currentTimeMillis();
 
 
     }
@@ -90,16 +94,22 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface {
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(this.relicTemplate);
 
-
         if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
             Log.i(getLogKey(), "VuMark FOUND:" + vuMark);
             robot.setVuMark(vuMark);
             return true;
+        } else if (System.currentTimeMillis() > this.startTimeMilliSeconds + 5000) {
+
+            Log.i(getLogKey(), "VuMark DEFAULTED on Timeout:" + RelicRecoveryVuMark.CENTER);
+            robot.setVuMark(RelicRecoveryVuMark.CENTER);
+            return true;
+
+        } else {
+            Log.i(getLogKey(), "VuMark not visible");
+            return false;
+
+
         }
-        Log.i(getLogKey(), "VuMark not visible");
-        return false;
-
-
     }
 
     @Override

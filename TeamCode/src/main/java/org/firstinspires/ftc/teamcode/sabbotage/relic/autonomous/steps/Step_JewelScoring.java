@@ -18,6 +18,7 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     private Robot.TeamEnum teamColor;
     private Robot.TeamEnum forwardJewelColor;
 
+    private boolean resetMotors_DoneFlag = false;
 
     private Robot.DirectionEnum robotMovedDirection;
 
@@ -42,11 +43,15 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
     @Override
     public void runStep() {
 
+        resetEncodersAndStopMotors_Only_Once();
+
+        if (robot.isStillWaiting()) return;
+
+        logRightEncoder();
+
         robot.motorDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
-        if (robot.isStillWaiting()) return;
 
         lowerJewelArm_runsOnlyOnce();
 
@@ -68,6 +73,18 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
     }
 
+    private void resetEncodersAndStopMotors_Only_Once() {
+
+        if (!resetMotors_DoneFlag) {
+
+            robot.resetEncodersAndStopMotors();
+            resetMotors_DoneFlag = true;
+
+            robot.setLoopDelay();
+        }
+
+    }
+
     private void raiseControlBlockLift() {
 
 
@@ -77,12 +94,12 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
         robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
         robot.motorBlockLift.setPower(.6);
 
-        Log.i(getLogKey(), "encoder" + robot.motorBlockLift.getCurrentPosition());
+        Log.i(getLogKey(), "Lift encoder" + robot.motorBlockLift.getCurrentPosition());
     }
 
-    private void logEncoders() {
+    private void logRightEncoder() {
 
-        Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition() + " --- LEFT:" + robot.motorDriveLeft.getCurrentPosition());
+        Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition());
     }
 
     private void lowerJewelArm_runsOnlyOnce() {
@@ -124,11 +141,10 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         if (robot.isStillWaiting()) return;
 
-
         if (displaceJewelDoneFlag == false) {
             driveRobotToDisplaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(1000);
+            robot.setTimeDelay(1500);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -151,21 +167,32 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         double power = .3;
 
+        int targetPosition = 0;
+        if (this.teamColor.equals(Robot.TeamEnum.BLUE)) {
+            targetPosition = 300;
+        } else {
+            targetPosition = 200;
+        }
+
+
         if (this.teamColor.equals(this.forwardJewelColor)) {
-            robot.motorDriveRight.setTargetPosition(-150);
+            robot.motorDriveRight.setTargetPosition(-targetPosition);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
             robot.motorDriveLeft.setPower(power);
             this.robotMovedDirection = Robot.DirectionEnum.REVERSE;
-            Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE");
+            Log.i(getLogKey(), "driveRobotToDisplaceJewel REVERSE, Current encoderCount:"
+                    + robot.motorDriveRight.getCurrentPosition());
+
 
         } else {
-            robot.motorDriveRight.setTargetPosition(+150);
+            robot.motorDriveRight.setTargetPosition(+targetPosition);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
             robot.motorDriveLeft.setPower(power);
             this.robotMovedDirection = Robot.DirectionEnum.FORWARD;
-            Log.i(getLogKey(), "driveRobotToDisplaceJewel forward");
+            Log.i(getLogKey(), "driveRobotToDisplaceJewel FORWARD, Current encoderCount:"
+                    + robot.motorDriveRight.getCurrentPosition());
         }
     }
 
@@ -179,27 +206,26 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             robot.motorDriveRight.setTargetPosition(0);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);;
+            robot.motorDriveLeft.setPower(power);
+            ;
             Log.i(getLogKey(), "driveRobotReturnToStartPosition Backward");
 
         } else {
             robot.motorDriveRight.setTargetPosition(0);
             robot.motorDriveLeft.setTargetPosition(0);
             robot.motorDriveRight.setPower(power);
-            robot.motorDriveLeft.setPower(power);;
+            robot.motorDriveLeft.setPower(power);
+            ;
             Log.i(getLogKey(), "driveRobotReturnToStartPosition forward");
         }
     }
-
-
-
 
 
     @Override
     public boolean isStepDone() {
         if (robot.isStillWaiting()) return false;
 
-        logEncoders();
+        Log.i(getLogKey(), " DONE RIGHT:" + robot.motorDriveRight.getCurrentPosition());
         if (this.returnRobotToStartPositionDoneFlag) {
             Log.i(getLogKey(), "Step is Done at angle:" + robot.getAngle());
             robot.resetEncodersAndStopMotors();
@@ -217,14 +243,14 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
             return;
         }
 
-        if ( readRedColor() >  readBlueColor()){
+        if (readRedColor() > readBlueColor()) {
 
             this.voteRed++;
             Log.i(getLogKey(), "read RED");
 
         }
 
-        if ( readBlueColor() >  readRedColor()){
+        if (readBlueColor() > readRedColor()) {
 
             this.voteBlue++;
             Log.i(getLogKey(), "read BLUE");
@@ -239,11 +265,11 @@ public class Step_JewelScoring implements AutonomousOp.StepInterface {
 
         if (voteRed > voteBlue) {
             this.forwardJewelColor = Robot.TeamEnum.RED;
-            Log.i(getLogKey(), "analyzeVote(): Red WINS! " +voteRed + " blue:" + voteBlue );
+            Log.i(getLogKey(), "analyzeVote(): Red WINS! " + voteRed + " blue:" + voteBlue);
         }
         if (voteBlue > voteRed) {
             this.forwardJewelColor = Robot.TeamEnum.BLUE;
-            Log.i(getLogKey(), "analyzeVote(): Blue WINS!" +voteBlue + " red:" + voteRed );
+            Log.i(getLogKey(), "analyzeVote(): Blue WINS!" + voteBlue + " red:" + voteRed);
         }
     }
 

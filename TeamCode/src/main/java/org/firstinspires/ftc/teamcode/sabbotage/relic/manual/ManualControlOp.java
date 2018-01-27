@@ -17,7 +17,7 @@ public class ManualControlOp extends OpMode {
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
     private static final int THIRD_FLOOR = SECOND_FLOOR + FLOOR;
-    private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR;
+    private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR/2;
 
 
     boolean resetBlockLiftDoneFlag;
@@ -70,7 +70,7 @@ public class ManualControlOp extends OpMode {
 
 
 //        test_servo();
-        driver_controlSideways();
+//        driver_controlSideways();
         driver_controlDriveMotors_Arcade();
         operator_controlPaddles();
         operator_controlBlockLift();
@@ -151,31 +151,31 @@ public class ManualControlOp extends OpMode {
 
     }
 
-    private void driver_controlSideways() {
-
-        if (gamepad1.a) {
-            robot.motorRobotLift.setPower(-.5);
-        } else if (gamepad1.y) {
-            robot.motorRobotLift.setPower(.5);
-        } else {
-            robot.motorRobotLift.setPower(0);
-        }
-
-        Log.i(KEY, "x: " + gamepad1.left_stick_x);
-
-
-        if (gamepad1.left_bumper) {
-            Log.i(KEY, "left_bumper Sideways");
-            robot.motorRobotSideways.setPower(-.5);
-        } else if (gamepad1.right_bumper) {
-            Log.i(KEY, "right_bumper Sideways");
-            robot.motorRobotSideways.setPower(.5);
-
-        } else {
-            Log.i(KEY, "cleared Sideways");
-            robot.motorRobotSideways.setPower(0);
-        }
-    }
+//    private void driver_controlSideways() {
+//
+//        if (gamepad1.a) {
+//            robot.motorRobotLift.setPower(-.5);
+//        } else if (gamepad1.y) {
+//            robot.motorRobotLift.setPower(.5);
+//        } else {
+//            robot.motorRobotLift.setPower(0);
+//        }
+//
+//        Log.i(KEY, "x: " + gamepad1.left_stick_x);
+//
+//
+//        if (gamepad1.left_bumper) {
+//            Log.i(KEY, "left_bumper Sideways");
+//            robot.motorRobotSideways.setPower(-.5);
+//        } else if (gamepad1.right_bumper) {
+//            Log.i(KEY, "right_bumper Sideways");
+//            robot.motorRobotSideways.setPower(.5);
+//
+//        } else {
+//            Log.i(KEY, "cleared Sideways");
+//            robot.motorRobotSideways.setPower(0);
+//        }
+//    }
 
 
     private float conditionsPower(float input) {

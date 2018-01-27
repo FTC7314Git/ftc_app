@@ -33,7 +33,7 @@ public class Robot {
     public static final double SERVO_PADDLE_LEFT_RELEASE = 0.45;
     public static final double SERVO_PADDLE_LEFT_OPEN = 0.65;
 
-    public static final double SERVO_PADDLE_RIGHT_CLOSE = 0.0;
+    public static final double SERVO_PADDLE_RIGHT_CLOSE = 0;
     public static final double SERVO_PADDLE_RIGHT_RELEASE = 0.35;
     public static final double SERVO_PADDLE_RIGHT_OPEN = 0.6;
 
@@ -57,7 +57,6 @@ public class Robot {
 
 
     public DcMotor motorRobotLift;
-    public DcMotor motorRobotSideways;
 
 
     public Servo servoLeftPaddle;
@@ -66,13 +65,8 @@ public class Robot {
 
     public Servo servoBlockPush;
 
-    public Servo servoColumnArm;
-
     public ColorSensor colorSensorJewel;
     public DistanceSensor distanceSensorJewel;
-
-    public ColorSensor colorSensorColumn;
-    public DistanceSensor distanceSensorColumn;
 
     public BNO055IMU imu;
     public Orientation angles;
@@ -96,7 +90,6 @@ public class Robot {
         this.motorBlockLift = this.hardwareMap.dcMotor.get("motorBlockLift");
 
         this.motorRobotLift = this.hardwareMap.dcMotor.get("motorRobotLift");
-        this.motorRobotSideways = this.hardwareMap.dcMotor.get("motorRobotSideways");
 
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
@@ -105,14 +98,8 @@ public class Robot {
 
         this.servoBlockPush = hardwareMap.servo.get("servoBlockPush");
 
-        this.servoColumnArm = hardwareMap.servo.get("servoColumnArm");
-
-
         this.colorSensorJewel = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
         this.distanceSensorJewel = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");
-
-        this.colorSensorColumn = hardwareMap.get(ColorSensor.class, "colorDistanceColumn");
-        this.distanceSensorColumn = hardwareMap.get(DistanceSensor.class, "colorDistanceColumn");
 
         resetHardwarePositions();
         setupIMU();

@@ -55,7 +55,7 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface {
         if (resetBlockLiftDoneFlag == false) {
             robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             resetBlockLiftDoneFlag = true;
-            robot.setTimeDelay(1000);
+            robot.setTimeDelay(100);
             Log.i(getLogKey(), "init_ResetBlockLift_onlyRunsOnce()");
 
         }

@@ -9,28 +9,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_TurnLeft implements AutonomousOp.StepInterface {
+public class Step_TurnReset2 implements AutonomousOp.StepInterface {
 
-    private static final double TARGET_TOLERANCE = 1;
-    private static final int SLOW_MODE_REMAINING_ANGLE = 60;
+    private static final double TARGET_TOLERANCE = .5;
 
     private Robot.MotorPowerEnum motorPowerEnum = Robot.MotorPowerEnum.Med;
 
     protected Robot robot;
 
     private boolean resetMotors_DoneFlag = false;
-    protected Double targetAngle;
+    protected Double targetAngle = 0.0;
 
 
     // Constructor, called to create an instance of this class.
-    public Step_TurnLeft(double angleDegrees) {
-
-        this.targetAngle = angleDegrees;
+    public Step_TurnReset2(Double targetAngle) {
+        this.targetAngle = targetAngle;
     }
 
     @Override
     public String getLogKey() {
-        return "Step_TurnLeft";
+        return "Step_TurnReset";
     }
 
 
@@ -52,32 +50,6 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
     }
 
-    protected double determinePower() {
-
-
-        double absRemainingAngle = Math.abs(remainingAngle());
-
-
-        if (absRemainingAngle < SLOW_MODE_REMAINING_ANGLE) {
-
-            return limitMinValue(this.motorPowerEnum.getValue() * absRemainingAngle / (SLOW_MODE_REMAINING_ANGLE));
-        }
-
-
-        return this.motorPowerEnum.getValue();
-
-    }
-
-    private double limitMinValue(double input) {
-
-        if (input < .03) {
-
-            return .03;
-        }
-
-        return input;
-    }
-
 
     private boolean isAtTargetAngle() {
 
@@ -86,35 +58,34 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
     protected double remainingAngle() {
 
-        return this.targetAngle - robot.getAngle();
+        return this.targetAngle - getAdjustedAngle();
+
+    }
+
+
+    private double getAdjustedAngle(){
+
+        return robot.getAngleOffZero();
 
     }
 
     private void turn() {
 
 
-        double power = determinePower();
+        double power = .03d;
 
-        if (hasOverShotTargetAngle()) {
+        if (getAdjustedAngle() > targetAngle) {
 
             robot.motorDriveRight.setPower(-power);
-
             robot.motorDriveLeft.setPower(+power);
-
-            logIt("Overshot:");
+            logIt("turnRight:");
 
         } else {
 
-
             robot.motorDriveRight.setPower(+power);
-
             robot.motorDriveLeft.setPower(-power);
-            logIt("Turning:");
+            logIt("TurningLeft:");
         }
-    }
-
-    protected boolean hasOverShotTargetAngle() {
-        return remainingAngle() < 0;
     }
 
 
@@ -144,7 +115,7 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
         if (isAtTargetAngle()) {
 
-            logIt("isStepDone");
+            Log.i(getLogKey(), "Step is Done at angle:" + robot.getAngle());
 
             robot.motorDriveRight.setPower(0);
             robot.motorDriveLeft.setPower(0);
@@ -159,7 +130,6 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
     private void logIt(String methodName) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(" , OS:" + hasOverShotTargetAngle());
         sb.append(" , CurrentAngle:" + robot.getAngle());
         sb.append(" , TargetAngle:" + targetAngle);
         sb.append(" , RemainingAngle:" + remainingAngle());

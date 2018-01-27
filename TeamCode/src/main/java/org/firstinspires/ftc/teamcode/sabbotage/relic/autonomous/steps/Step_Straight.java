@@ -20,7 +20,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
     private boolean resetMotors_DoneFlag = false;
     private boolean initializedMotors_DoneFlag = false;
 
-    private final int SLOW_FINISH_REMAINING_DISANCE = 1100;
+    private final int SLOW_FINISH_REMAINING_DISANCE = 500;
     private final int SLOW_START_DISTANCE = 1000;
 
     private final int DONE_TOLERANCE = 50;
@@ -34,7 +34,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
             switch (relicRecoveryVuMarkEnum) {
                 case LEFT:
-                    return 2700;
+                    return 2400;
                 case CENTER:
                     return 2000;
                 case RIGHT:
@@ -74,11 +74,11 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
             switch (relicRecoveryVuMarkEnum) {
                 case RIGHT:
-                    return 2200;
+                    return 2200;  // 2600
                 case CENTER:
-                    return 2500;
+                    return 1800;  // 2200
                 case LEFT:
-                    return 3000;
+                    return 1500;  // 1800
 
 
             }
@@ -102,7 +102,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
 
         this.robotStartPositionEnum = robotStartPositionEnum;
         this.direction = direction;
-        this.motorPowerEnum = Robot.MotorPowerEnum.Med;
+        this.motorPowerEnum = Robot.MotorPowerEnum.High;
     }
 
 
@@ -146,7 +146,7 @@ public class Step_Straight implements AutonomousOp.StepInterface {
         }
 
         // TODO, remove this, StepVuMark will set this value.
-        robot.setVuMark(RelicRecoveryVuMark.LEFT);
+//        robot.setVuMark(RelicRecoveryVuMark.LEFT);
 
 
         this.targetDistanceEncoderCounts = getTargetDistance(this.robotStartPositionEnum, robot.getVuMark());
