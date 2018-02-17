@@ -29,6 +29,14 @@ public class Robot {
     public static final double SERVO_JEWEL_ARM_POSITION_UP = 0;
 
 
+    public static final double SERVO_JEWEL_WRIST_POSITION_FORWRD = 1;
+    public static final double SERVO_JEWEL_WRIST_POSITION_MIDDLE = .5;
+    public static final double SERVO_JEWEL_WRIST_POSITION_BACKWARD = 0;
+    public static final double SERVO_JEWEL_WRIST_POSITION_ARM_UP = .5;
+
+
+
+
     public static final double SERVO_PADDLE_LEFT_CLOSE = 0.0;
     public static final double SERVO_PADDLE_LEFT_RELEASE = 0.45;
     public static final double SERVO_PADDLE_LEFT_OPEN = 0.65;
@@ -62,6 +70,7 @@ public class Robot {
     public Servo servoLeftPaddle;
     public Servo servoRightPaddle;
     public Servo servoJewelArm;
+    public Servo servoJewelWrist;
 
     public Servo servoBlockPush;
 
@@ -84,7 +93,6 @@ public class Robot {
 
         }
 
-
         this.motorDriveLeft = this.hardwareMap.dcMotor.get("motorDriveLeft");
         this.motorDriveRight = this.hardwareMap.dcMotor.get("motorDriveRight");
         this.motorBlockLift = this.hardwareMap.dcMotor.get("motorBlockLift");
@@ -95,6 +103,7 @@ public class Robot {
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
 
         this.servoJewelArm = hardwareMap.servo.get("servoJewelArm");
+        this.servoJewelWrist = hardwareMap.servo.get("servoJewelWrist");
 
         this.servoBlockPush = hardwareMap.servo.get("servoBlockPush");
 
@@ -139,10 +148,12 @@ public class Robot {
 
         this.servoRightPaddle.setDirection(Servo.Direction.FORWARD);
         this.servoLeftPaddle.setDirection(Servo.Direction.REVERSE);
-        this.servoJewelArm.setDirection(Servo.Direction.FORWARD);
+        this.servoJewelArm.setDirection(Servo.Direction.REVERSE);
+        this.servoJewelWrist.setDirection(Servo.Direction.REVERSE);
 
 
         this.servoJewelArm.setPosition(0.0);
+        this.servoJewelWrist.setPosition(SERVO_JEWEL_WRIST_POSITION_ARM_UP);
 //        this.servoRightPaddle.setPosition(0.0);
 //        this.servoLeftPaddle.setPosition(0.1);
     }

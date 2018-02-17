@@ -48,15 +48,15 @@ public class AutoBlueLeft extends AutonomousOp {
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
         definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
-//        definedStepList.add(new Step_TurnReset());
-//        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE, Robot.DirectionEnum.REVERSE));
+        definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.BLUE));
+        definedStepList.add(new Step_TurnReset());
+        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE, Robot.DirectionEnum.REVERSE));
 
 
-//        definedStepList.add(new Step_TurnRight(285));
-//        definedStepList.add(new Step_Straight(500, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-//        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
+        definedStepList.add(new Step_TurnRight(285));
+        definedStepList.add(new Step_Straight(500, Robot.DirectionEnum.FORWARD));
+        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
+        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
         return definedStepList;
 

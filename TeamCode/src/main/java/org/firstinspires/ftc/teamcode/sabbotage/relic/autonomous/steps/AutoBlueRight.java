@@ -49,7 +49,7 @@ public class AutoBlueRight extends AutonomousOp {
 
         definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
         definedStepList.add(new Step_ReadVuMark());
-        definedStepList.add(new Step_JewelScoring(Robot.TeamEnum.BLUE));
+        definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.BLUE));
         definedStepList.add(new Step_TurnReset2(-3.0));
         definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE, Robot.DirectionEnum.REVERSE));
         definedStepList.add(new Step_TurnRight(260));
