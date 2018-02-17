@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,24 +8,22 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_PaddleControl implements AutonomousOp.StepInterface {
-
+public class Step_BlockLift implements AutonomousOp.StepInterface {
 
     private Robot robot;
-    private Robot.PaddlePosition paddlePosition;
-
     boolean resetBlockLiftDoneFlag;
+    private boolean blockLiftDoneFlag = false;
+
 
     // Constructor, called to create an instance of this class.
-    public Step_PaddleControl(Robot.PaddlePosition paddlePosition) {
+    public Step_BlockLift() {
 
-        this.paddlePosition = paddlePosition;
     }
 
 
     @Override
     public String getLogKey() {
-        return "Step_PaddleControl";
+        return "Step_BlockLift";
     }
 
 
@@ -33,18 +32,7 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface {
 
         init_ResetBlockLift_onlyRunsOnce();
 
-        if (Robot.PaddlePosition.CLOSE.equals(this.paddlePosition)) {
-
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
-        }
-
-        if (Robot.PaddlePosition.OPEN.equals(this.paddlePosition)) {
-
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
-        }
-
+        raiseControlBlockLift();
 
     }
 
@@ -62,17 +50,30 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface {
     }
 
 
+    private void raiseControlBlockLift() {
+
+        if (robot.isStillWaiting()) return;
+
+        int targetBlockLiftPosition = 250;
+
+        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
+        robot.motorBlockLift.setPower(.6);
+
+        Log.i(getLogKey(), "raiseControlBlockLift encoder" + robot.motorBlockLift.getCurrentPosition());
+    }
 
 
     @Override
     public boolean isStepDone() {
 
+        if (robot.isStillWaiting()) return false;
 
-        if (robot.isStillWaiting()) {
-            return false;
+        if (this.blockLiftDoneFlag) {
+
+            return true;
         }
-
-        return true;
+        return false;
     }
 
 

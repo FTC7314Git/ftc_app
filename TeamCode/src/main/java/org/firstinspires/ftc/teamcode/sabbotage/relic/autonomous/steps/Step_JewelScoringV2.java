@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
@@ -17,10 +15,6 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
     private boolean resetJewelWristDoneFlag;
     private Robot.TeamEnum teamColor;
     private Robot.TeamEnum forwardJewelColor;
-
-    private boolean resetMotors_DoneFlag = false;
-
-    private Robot.DirectionEnum robotMovedDirection;
 
     private int voteRed = 0;
     private int voteBlue = 0;
@@ -47,8 +41,6 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
 
         lowerJewelArm_runsOnlyOnce();
 
-        raiseControlBlockLift();
-
         determineJewelColor();
 
         if (isJewelColorKnown()) {
@@ -62,35 +54,6 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
         if (isJewelWristReset()) {
             raiseJewelArm_runsOnlyOnce();
         }
-    }
-
-    private void resetEncodersAndStopMotors_Only_Once() {
-
-        if (!resetMotors_DoneFlag) {
-
-            robot.resetEncodersAndStopMotors();
-            resetMotors_DoneFlag = true;
-
-            robot.setLoopDelay();
-        }
-
-    }
-
-    private void raiseControlBlockLift() {
-
-
-        int targetBlockLiftPosition = 150;
-
-        robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
-        robot.motorBlockLift.setPower(.6);
-
-        Log.i(getLogKey(), "raiseControlBlockLift encoder" + robot.motorBlockLift.getCurrentPosition());
-    }
-
-    private void logRightEncoder() {
-
-        Log.i(getLogKey(), " RIGHT:" + robot.motorDriveRight.getCurrentPosition());
     }
 
     private void lowerJewelArm_runsOnlyOnce() {
@@ -127,7 +90,7 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
 
             robot.servoJewelWrist.setPosition(robot.SERVO_JEWEL_WRIST_POSITION_MIDDLE);
             resetJewelWristDoneFlag = true;
-            robot.setTimeDelay(100);
+            robot.setTimeDelay(500);
             Log.i(getLogKey(), "resetJewelWrist_runsOnlyOnce robot.SERVO_JEWEL_WRIST_POSITION_MIDDLE");
         }
     }
@@ -140,7 +103,7 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
         if (displaceJewelDoneFlag == false) {
             displaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(1500);
+            robot.setTimeDelay(1000);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -152,8 +115,8 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
             robot.servoJewelWrist.setPosition(robot.SERVO_JEWEL_WRIST_POSITION_BACKWARD);
             Log.i(getLogKey(), "robot.SERVO_JEWEL_WRIST_POSITION_BACKWARD");
         } else {
-            robot.servoJewelWrist.setPosition(robot.SERVO_JEWEL_WRIST_POSITION_FORWRD);
-            Log.i(getLogKey(), "robot.SERVO_JEWEL_WRIST_POSITION_FORWRD");
+            robot.servoJewelWrist.setPosition(robot.SERVO_JEWEL_WRIST_POSITION_FORWARD);
+            Log.i(getLogKey(), "robot.SERVO_JEWEL_WRIST_POSITION_FORWARD");
         }
 
     }
@@ -207,6 +170,8 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
     }
 
     private boolean isJewelColorKnown() {
+
+        if (this.forwardJewelColor != null) return true;
 
         if (Math.abs(this.voteRed - this.voteBlue) >= 10) {
             analyzeVote();

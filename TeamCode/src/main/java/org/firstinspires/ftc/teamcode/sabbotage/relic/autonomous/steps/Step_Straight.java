@@ -63,9 +63,9 @@ public class Step_Straight implements AutonomousOp.StepInterface {
                 case LEFT:
                     return 1000;
                 case CENTER:
-                    return 1800;
+                    return 1000;
                 case RIGHT:
-                    return 2000;
+                    return 1000;
 
             }
         }

@@ -70,10 +70,12 @@ public class ManualControlOp extends OpMode {
 
 
 //        test_servo();
-//        driver_controlSideways();
         driver_controlDriveMotors_Arcade();
         operator_controlPaddles();
         operator_controlBlockLift();
+
+        operator_extendRelicArm();
+        driver_controlRelicGrabber();
     }
 
 
@@ -103,6 +105,36 @@ public class ManualControlOp extends OpMode {
 
     }
 
+    private void operator_extendRelicArm() {
+
+        if (gamepad2.right_trigger > .05) {
+            robot.motorExtendRelicArm.setPower(gamepad2.right_trigger);
+        }
+
+        if (gamepad2.left_trigger > .05) {
+            robot.motorExtendRelicArm.setPower(-gamepad2.left_trigger);
+        }
+    }
+
+    private void driver_controlRelicGrabber() {
+
+        if (gamepad1.right_bumper) {
+            robot.servoRelicWrist.setPosition(Robot.SERVO_RELIC_WRIST_DOWN);
+        }
+        if (gamepad1.left_bumper) {
+            robot.servoRelicWrist.setPosition(Robot.SERVO_RELIC_WRIST_UP);
+        }
+
+        if (gamepad1.right_trigger > 0.2) {
+            robot.servoRelicGrab.setPosition(Robot.SERVO_RELIC_GRAB_CLOSE);
+        }
+
+        if (gamepad1.left_trigger > 0.2) {
+            robot.servoRelicGrab.setPosition(Robot.SERVO_RELIC_GRAB_OPEN);
+        }
+
+
+    }
     private void operator_controlPaddles() {
 
         if (gamepad2.x) {

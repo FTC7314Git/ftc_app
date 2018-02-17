@@ -29,10 +29,9 @@ public class Robot {
     public static final double SERVO_JEWEL_ARM_POSITION_UP = 0;
 
 
-    public static final double SERVO_JEWEL_WRIST_POSITION_FORWRD = 1;
-    public static final double SERVO_JEWEL_WRIST_POSITION_MIDDLE = .5;
-    public static final double SERVO_JEWEL_WRIST_POSITION_BACKWARD = 0;
-    public static final double SERVO_JEWEL_WRIST_POSITION_ARM_UP = .5;
+    public static final double SERVO_JEWEL_WRIST_POSITION_FORWARD = .9;
+    public static final double SERVO_JEWEL_WRIST_POSITION_MIDDLE = .53;
+    public static final double SERVO_JEWEL_WRIST_POSITION_BACKWARD = .2;
 
 
 
@@ -44,6 +43,13 @@ public class Robot {
     public static final double SERVO_PADDLE_RIGHT_CLOSE = 0;
     public static final double SERVO_PADDLE_RIGHT_RELEASE = 0.35;
     public static final double SERVO_PADDLE_RIGHT_OPEN = 0.6;
+
+    public static final double SERVO_RELIC_WRIST_UP = 0;
+    public static final double SERVO_RELIC_WRIST_DOWN = 0.7;
+
+    public static final double SERVO_RELIC_GRAB_OPEN = 0;
+    public static final double SERVO_RELIC_GRAB_CLOSE = 0.7;
+
 
     public static final double SERVO_BLOCK_PUSH_OUT = 0;
     public static final double SERVO_BLOCK_PUSH_IN = 0.7;
@@ -63,14 +69,16 @@ public class Robot {
     public DcMotor motorDriveLeft;
     public DcMotor motorBlockLift;
 
-
     public DcMotor motorRobotLift;
-
+    public DcMotor motorExtendRelicArm;
 
     public Servo servoLeftPaddle;
     public Servo servoRightPaddle;
     public Servo servoJewelArm;
     public Servo servoJewelWrist;
+
+    public Servo servoRelicWrist;
+    public Servo servoRelicGrab;
 
     public Servo servoBlockPush;
 
@@ -99,11 +107,20 @@ public class Robot {
 
         this.motorRobotLift = this.hardwareMap.dcMotor.get("motorRobotLift");
 
+
+        this.motorExtendRelicArm = this.hardwareMap.dcMotor.get("motorExtendRelicArm");
+
         this.servoLeftPaddle = hardwareMap.servo.get("servoLeftPaddle");
         this.servoRightPaddle = hardwareMap.servo.get("servoRightPaddle");
 
         this.servoJewelArm = hardwareMap.servo.get("servoJewelArm");
         this.servoJewelWrist = hardwareMap.servo.get("servoJewelWrist");
+
+
+        this.servoRelicWrist = hardwareMap.servo.get("servoRelicWrist");
+        this.servoRelicGrab = hardwareMap.servo.get("servoRelicGrab");
+
+
 
         this.servoBlockPush = hardwareMap.servo.get("servoBlockPush");
 
@@ -152,8 +169,12 @@ public class Robot {
         this.servoJewelWrist.setDirection(Servo.Direction.REVERSE);
 
 
+        this.servoRelicWrist.setDirection(Servo.Direction.FORWARD);
+        this.servoRelicGrab.setDirection(Servo.Direction.FORWARD);
+
+
         this.servoJewelArm.setPosition(0.0);
-        this.servoJewelWrist.setPosition(SERVO_JEWEL_WRIST_POSITION_ARM_UP);
+        this.servoJewelWrist.setPosition(SERVO_JEWEL_WRIST_POSITION_MIDDLE);
 //        this.servoRightPaddle.setPosition(0.0);
 //        this.servoLeftPaddle.setPosition(0.1);
     }

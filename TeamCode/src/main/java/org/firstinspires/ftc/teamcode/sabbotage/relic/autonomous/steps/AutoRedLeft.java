@@ -51,7 +51,7 @@ public class AutoRedLeft extends AutonomousOp {
         definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
         definedStepList.add(new Step_ReadVuMark());
         definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.RED));
-        definedStepList.add(new Step_TurnReset2(3.0));
+        definedStepList.add(new Step_BlockLift());
         definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.RED_LEFT_SIDE, Robot.DirectionEnum.FORWARD));
 
 
