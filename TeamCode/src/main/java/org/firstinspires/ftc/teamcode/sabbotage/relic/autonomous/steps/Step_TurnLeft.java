@@ -6,17 +6,20 @@ import android.util.Log;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
-    private static final double TARGET_TOLERANCE = 1;
+    private static final double TARGET_TOLERANCE = 1.5;
     private static final int SLOW_MODE_REMAINING_ANGLE = 60;
 
     private Robot.MotorPowerEnum motorPowerEnum = Robot.MotorPowerEnum.Med;
 
     protected Robot robot;
+
+    protected Robot.RobotStartPositionEnum robotStartPositionEnum;
 
     private boolean resetMotors_DoneFlag = false;
     protected Double targetAngle;
@@ -26,6 +29,13 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
     public Step_TurnLeft(double angleDegrees) {
 
         this.targetAngle = angleDegrees;
+    }
+
+
+    // Constructor, called to create an instance of this class.
+    public Step_TurnLeft(Robot.RobotStartPositionEnum robotStartPositionEnum) {
+
+        this.robotStartPositionEnum = robotStartPositionEnum;
     }
 
     @Override
@@ -47,6 +57,8 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
         robot.runWithEncoders_MAINTAINS_SPEED();
 
         robot.angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        initializeSetupForVuMarkAngles_Only_Once();
 
         turn();
 
@@ -86,7 +98,7 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
 
     protected double remainingAngle() {
 
-        return this.targetAngle - robot.getAngle();
+        return  robot.getAngle() - this.targetAngle;
 
     }
 
@@ -181,5 +193,81 @@ public class Step_TurnLeft implements AutonomousOp.StepInterface {
         this.robot = robot;
     }
 
+    protected void initializeSetupForVuMarkAngles_Only_Once() {
 
-}
+        if (this.targetAngle != null) {
+            return;
+        }
+
+        this.targetAngle = getAngleBasedOnPictograph(this.robotStartPositionEnum, robot.getVuMark());
+
+        Log.i(getLogKey(), "Start: " + robot.getVuMark() + " for " + this.targetAngle);
+    }
+
+    public static double getAngleBasedOnPictograph(Robot.RobotStartPositionEnum robotStartPositionEnum,
+                                                   RelicRecoveryVuMark relicRecoveryVuMarkEnum) {
+
+        relicRecoveryVuMarkEnum = RelicRecoveryVuMark.CENTER;
+
+            if (Robot.RobotStartPositionEnum.RED_LEFT_SIDE.equals(robotStartPositionEnum)) {
+
+                switch (relicRecoveryVuMarkEnum) {
+                    case LEFT:
+                        return 2400;
+                    case CENTER:
+                        return 2000;
+                    case RIGHT:
+                        return 1600;
+
+                }
+            }
+
+            if (Robot.RobotStartPositionEnum.RED_RIGHT_SIDE.equals(robotStartPositionEnum)) {
+
+                switch (relicRecoveryVuMarkEnum) {
+                    case LEFT:
+                        return 10;
+                    case CENTER:
+                        return 340;
+                    case RIGHT:
+                        return 15;
+
+
+                }
+            }
+
+            if (Robot.RobotStartPositionEnum.BLUE_LEFT_SIDE.equals(robotStartPositionEnum)) {
+
+                switch (relicRecoveryVuMarkEnum) {
+                    case RIGHT:
+                        return 142;
+                    case CENTER:
+                        return 170;
+                    case LEFT:
+                        return 200;
+
+                }
+            }
+
+            if (Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE.equals(robotStartPositionEnum)) {
+
+                switch (relicRecoveryVuMarkEnum) {
+                    case RIGHT:
+                        return 2200;  // 2600
+                    case CENTER:
+                        return 1800;  // 2200
+                    case LEFT:
+                        return 1500;  // 1800
+
+
+                }
+            }
+
+            return 0;
+        }
+
+
+    }
+
+
+

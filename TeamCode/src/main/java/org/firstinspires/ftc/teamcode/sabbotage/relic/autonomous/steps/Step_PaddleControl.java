@@ -13,7 +13,7 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface {
     private Robot robot;
     private Robot.PaddlePosition paddlePosition;
 
-    boolean resetBlockLiftDoneFlag;
+    boolean paddlePositionDoneFlag;
 
     // Constructor, called to create an instance of this class.
     public Step_PaddleControl(Robot.PaddlePosition paddlePosition) {
@@ -31,37 +31,26 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface {
     @Override
     public void runStep() {
 
-        init_ResetBlockLift_onlyRunsOnce();
+        if (paddlePositionDoneFlag == false) {
 
-        if (Robot.PaddlePosition.CLOSE.equals(this.paddlePosition)) {
+            if (Robot.PaddlePosition.CLOSE.equals(this.paddlePosition)) {
 
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
+                robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
+                robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
+            }
+
+            if (Robot.PaddlePosition.OPEN.equals(this.paddlePosition)) {
+
+                robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
+                robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
+            }
+
+            paddlePositionDoneFlag = true;
+            robot.setTimeDelay(1000);
+
         }
-
-        if (Robot.PaddlePosition.OPEN.equals(this.paddlePosition)) {
-
-            robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
-            robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
-        }
-
 
     }
-
-    private void init_ResetBlockLift_onlyRunsOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-        if (resetBlockLiftDoneFlag == false) {
-            robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            resetBlockLiftDoneFlag = true;
-            robot.setTimeDelay(300);
-            Log.i(getLogKey(), "init_ResetBlockLift_onlyRunsOnce()");
-
-        }
-    }
-
-
 
 
     @Override

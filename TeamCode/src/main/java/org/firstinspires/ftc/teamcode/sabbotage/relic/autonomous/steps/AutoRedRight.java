@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "Auto Red Jewel ONLY", group = "Red")
+@Autonomous(name = "Auto Red Right", group = "Red")
 public class AutoRedRight extends AutonomousOp {
 
 
@@ -48,17 +48,17 @@ public class AutoRedRight extends AutonomousOp {
 
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-        definedStepList.add(new Step_ReadVuMark());
-        definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.RED));
+//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
+//        definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.RED));
         definedStepList.add(new Step_BlockLift());
-//        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.RED_LEFT_SIDE, Robot.DirectionEnum.FORWARD));
-
-
-//        definedStepList.add(new Step_TurnRight(285));
+//        definedStepList.add(new Step_ReadVuMark());
+//        definedStepList.add(new Step_Straight(1500, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_TurnLeft(90));
+//        definedStepList.add(new Step_Straight(300, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_TurnRight(Robot.RobotStartPositionEnum.RED_RIGHT_SIDE));
 //        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-//        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.FORWARD));
-//        definedStepList.add(new Step_Straight(150, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_Straight(500, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
         return definedStepList;
 

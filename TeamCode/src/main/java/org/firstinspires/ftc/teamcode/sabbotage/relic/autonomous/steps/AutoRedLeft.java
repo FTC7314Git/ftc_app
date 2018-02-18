@@ -48,17 +48,17 @@ public class AutoRedLeft extends AutonomousOp {
 
         ArrayList<StepInterface> definedStepList = new ArrayList<StepInterface>();
 
-        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-        definedStepList.add(new Step_ReadVuMark());
+//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
+//        definedStepList.add(new Step_ReadVuMark());
         definedStepList.add(new Step_JewelScoringV2(Robot.TeamEnum.RED));
-        definedStepList.add(new Step_BlockLift());
-        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.RED_LEFT_SIDE, Robot.DirectionEnum.FORWARD));
-
-
-        definedStepList.add(new Step_TurnRight(285));
-        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.FORWARD));
-        definedStepList.add(new Step_Straight(150, Robot.DirectionEnum.REVERSE));
+//        definedStepList.add(new Step_BlockLift());
+//        definedStepList.add(new Step_Straight(Robot.RobotStartPositionEnum.RED_LEFT_SIDE, Robot.DirectionEnum.FORWARD));
+//
+//
+//        definedStepList.add(new Step_TurnRight(285));
+//        definedStepList.add(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
+//        definedStepList.add(new Step_Straight(350, Robot.DirectionEnum.FORWARD));
+//        definedStepList.add(new Step_Straight(150, Robot.DirectionEnum.REVERSE));
 
         return definedStepList;
 

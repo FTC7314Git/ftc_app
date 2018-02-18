@@ -1,12 +1,18 @@
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
+import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
+
 public class Step_TurnRight extends Step_TurnLeft {
 
     // Constructor, called to create an instance of this class.
     public Step_TurnRight(double angleDegrees) {
         super(angleDegrees);
     }
+    // Constructor, called to create an instance of this class.
+    public Step_TurnRight(Robot.RobotStartPositionEnum robotStartPositionEnum) {
 
+        super(robotStartPositionEnum);
+    }
 
     @Override
 
@@ -19,7 +25,7 @@ public class Step_TurnRight extends Step_TurnLeft {
     protected double remainingAngle() {
 
 
-        return robot.getAngle() - this.targetAngle;
+        return  this.targetAngle - robot.getAngle();
     }
 
 
@@ -32,7 +38,7 @@ public class Step_TurnRight extends Step_TurnLeft {
 
     @Override
     protected boolean hasOverShotTargetAngle() {
-        return false;
+        return remainingAngle() < 0;
     }
 
 }

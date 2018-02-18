@@ -21,6 +21,12 @@ public class Step_BlockLift implements AutonomousOp.StepInterface {
     }
 
 
+    // Constructor, called to create an instance of this class.
+    public Step_BlockLift(boolean alreadyInitalizeded) {
+
+        this.blockLiftDoneFlag = alreadyInitalizeded;
+    }
+
     @Override
     public String getLogKey() {
         return "Step_BlockLift";
@@ -54,12 +60,12 @@ public class Step_BlockLift implements AutonomousOp.StepInterface {
 
         if (robot.isStillWaiting()) return;
 
-        int targetBlockLiftPosition = 250;
+        int targetBlockLiftPosition = 180;
 
         robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
         robot.motorBlockLift.setPower(.6);
-
+        this.blockLiftDoneFlag = true;
         Log.i(getLogKey(), "raiseControlBlockLift encoder" + robot.motorBlockLift.getCurrentPosition());
     }
 

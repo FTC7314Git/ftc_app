@@ -46,6 +46,11 @@ public abstract class AutonomousOp extends OpMode {
 //    }
 
 
+    public Robot getRobot() {
+
+        return this.robot;
+    }
+
     @Override
     public void loop() {
 
