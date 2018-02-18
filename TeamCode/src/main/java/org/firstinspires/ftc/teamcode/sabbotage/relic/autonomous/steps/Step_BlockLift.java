@@ -8,23 +8,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_BlockLift implements AutonomousOp.StepInterface {
+public class Step_BlockLift implements AutonomousOp.StepInterface, StepInterface {
 
     private Robot robot;
-    boolean resetBlockLiftDoneFlag;
     private boolean blockLiftDoneFlag = false;
+    Integer targetBlockLiftPosition;
 
 
     // Constructor, called to create an instance of this class.
-    public Step_BlockLift() {
+    public Step_BlockLift(Integer targetBlockLiftPosition) {
+        this.targetBlockLiftPosition = targetBlockLiftPosition;
 
-    }
-
-
-    // Constructor, called to create an instance of this class.
-    public Step_BlockLift(boolean alreadyInitalizeded) {
-
-        this.blockLiftDoneFlag = alreadyInitalizeded;
     }
 
     @Override
@@ -36,27 +30,11 @@ public class Step_BlockLift implements AutonomousOp.StepInterface {
     @Override
     public void runStep() {
 
-        init_ResetBlockLift_onlyRunsOnce();
-
-        raiseControlBlockLift();
+        moveControlBlockLift();
 
     }
 
-    private void init_ResetBlockLift_onlyRunsOnce() {
-
-        if (robot.isStillWaiting()) return;
-
-        if (resetBlockLiftDoneFlag == false) {
-            robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            resetBlockLiftDoneFlag = true;
-            robot.setTimeDelay(300);
-            Log.i(getLogKey(), "init_ResetBlockLift_onlyRunsOnce()");
-
-        }
-    }
-
-
-    private void raiseControlBlockLift() {
+    private void moveControlBlockLift() {
 
         if (robot.isStillWaiting()) return;
 

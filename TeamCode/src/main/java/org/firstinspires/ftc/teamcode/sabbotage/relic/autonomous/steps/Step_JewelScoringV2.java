@@ -6,7 +6,7 @@ import android.util.Log;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_JewelScoringV2 implements AutonomousOp.StepInterface {
+public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInterface{
 
     private Robot robot;
     private boolean lowerJewelArmDoneFlag;

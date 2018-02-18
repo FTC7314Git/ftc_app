@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_ReadVuMark implements AutonomousOp.StepInterface {
+public class Step_ReadVuMark implements AutonomousOp.StepInterface , StepInterface{
 
     private Robot robot;
     private boolean initDoneFlag;

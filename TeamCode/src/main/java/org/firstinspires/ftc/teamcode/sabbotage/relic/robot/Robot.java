@@ -90,7 +90,13 @@ public class Robot {
 
     private RelicRecoveryVuMark vuMark = null;
 
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
+
+    public Robot() {
+
+    }
+
+
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
 
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
@@ -175,8 +181,6 @@ public class Robot {
 
         this.servoJewelArm.setPosition(0.0);
         this.servoJewelWrist.setPosition(SERVO_JEWEL_WRIST_POSITION_MIDDLE);
-//        this.servoRightPaddle.setPosition(0.0);
-//        this.servoLeftPaddle.setPosition(0.1);
     }
 
     public void setDriveMotorForwardDirection() {

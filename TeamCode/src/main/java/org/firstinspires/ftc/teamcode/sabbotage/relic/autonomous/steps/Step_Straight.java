@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_Straight implements AutonomousOp.StepInterface {
+public class Step_Straight implements AutonomousOp.StepInterface, StepInterface {
 
     private Integer targetDistanceEncoderCounts = null;
     private Robot.DirectionEnum direction = null;
