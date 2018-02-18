@@ -46,13 +46,37 @@ public class LinearBlueHard extends LinearBase {
         robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         runStepUntilDone(new Step_BlockLift(200));
         runStepUntilDone(new Step_ReadVuMark());
+        runStepUntilDone(new Step_Straight(1400, Robot.DirectionEnum.FORWARD));
+        runStepUntilDone(new Step_TurnV2(+90.0));
         runStepStraightBasedOnVuMark();
-        runStepUntilDone(new Step_TurnV2(+100.0));
+
+        runStepTurnBasedOnVuMark();
         runStepUntilDone(new Step_BlockLift(10));
         runStepUntilDone(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
         runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 3000L);
         runStepUntilDone(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
+    }
+
+    private void runStepTurnBasedOnVuMark() {
+
+        Double angle;
+        switch (robot.getVuMark()) {
+
+            case LEFT:
+                angle = 140.0;
+                break;
+            case CENTER:
+                angle = 140.0;
+                break;
+            case RIGHT:
+                angle = 140.0;
+                break;
+            default:
+                angle = 140.0;
+        }
+
+        runStepUntilDone(new Step_TurnV2(angle));
     }
 
     private void runStepStraightBasedOnVuMark() {
@@ -61,19 +85,19 @@ public class LinearBlueHard extends LinearBase {
         switch (robot.getVuMark()) {
 
             case LEFT:
-                distance = 1500;
+                distance = 300;
                 break;
             case CENTER:
-                distance = 1800;
+                distance = 600;
                 break;
             case RIGHT:
-                distance = 2200;
+                distance = 800;
                 break;
             default:
-                distance = 1500;
+                distance = 600;
         }
 
-        runStepUntilDone(new Step_Straight(distance, Robot.DirectionEnum.REVERSE));
+        runStepUntilDone(new Step_Straight(distance, Robot.DirectionEnum.FORWARD));
     }
 
 }

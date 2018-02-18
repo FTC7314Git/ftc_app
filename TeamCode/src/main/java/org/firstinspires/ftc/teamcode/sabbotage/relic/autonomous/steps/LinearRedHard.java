@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 @Autonomous(name = "LinearBlueEasy", group = "Blue")
-public class LinearRedEasy extends LinearBase {
+public class LinearRedHard extends LinearBase {
 
 
     protected void executePlan() {
@@ -46,13 +46,37 @@ public class LinearRedEasy extends LinearBase {
         robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         runStepUntilDone(new Step_BlockLift(200));
         runStepUntilDone(new Step_ReadVuMark());
+        runStepUntilDone(new Step_Straight(1500, Robot.DirectionEnum.FORWARD));
+        runStepUntilDone(new Step_TurnV2(-90.0));
         runStepStraightBasedOnVuMark();
-        runStepUntilDone(new Step_TurnV2(+75.0));
+
+        runStepTurnBasedOnVuMark();
         runStepUntilDone(new Step_BlockLift(10));
         runStepUntilDone(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-        runStepUntilDone(new Step_Straight(350, Robot.DirectionEnum.FORWARD), 3000L);
-        runStepUntilDone(new Step_Straight(150, Robot.DirectionEnum.REVERSE));
+        runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 3000L);
+        runStepUntilDone(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
+    }
+
+    private void runStepTurnBasedOnVuMark() {
+
+        Double angle;
+        switch (robot.getVuMark()) {
+
+            case LEFT:
+                angle = 140.0;
+                break;
+            case CENTER:
+                angle = 140.0;
+                break;
+            case RIGHT:
+                angle = 140.0;
+                break;
+            default:
+                angle = 140.0;
+        }
+
+        runStepUntilDone(new Step_TurnV2(angle));
     }
 
     private void runStepStraightBasedOnVuMark() {
@@ -61,16 +85,16 @@ public class LinearRedEasy extends LinearBase {
         switch (robot.getVuMark()) {
 
             case LEFT:
-                distance = 2400;
+                distance = 300;
                 break;
             case CENTER:
-                distance = 2000;
+                distance = 600;
                 break;
             case RIGHT:
-                distance = 1600;
+                distance = 800;
                 break;
             default:
-                distance = 1600;
+                distance = 600;
         }
 
         runStepUntilDone(new Step_Straight(distance, Robot.DirectionEnum.FORWARD));
