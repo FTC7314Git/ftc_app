@@ -14,14 +14,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-public class Step_ReadVuMark implements AutonomousOp.StepInterface , StepInterface{
+public class Step_ReadVuMark implements AutonomousOp.StepInterface, StepInterface {
 
     private Robot robot;
     private boolean initDoneFlag;
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
 
-    private long startTimeMilliSeconds;
 
     // Constructor, called to create an instance of this class.
     public Step_ReadVuMark() {
@@ -35,11 +34,13 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface , StepInterfa
 
 
     private void initVuforia_runOnlyOnce() {
+
         if (initDoneFlag) {
             return;
         }
         initDoneFlag = true;
 
+        Log.i(getLogKey(), "initVuforia_runOnlyOnce: IN");
         HardwareMap hardwareMap = robot.getHardwareMap();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -53,9 +54,7 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface , StepInterfa
 
         relicTrackables.activate();
 
-        this.startTimeMilliSeconds = System.currentTimeMillis();
-
-
+        Log.i(getLogKey(), "initVuforia_runOnlyOnce: out");
     }
 
 
@@ -98,12 +97,6 @@ public class Step_ReadVuMark implements AutonomousOp.StepInterface , StepInterfa
             Log.i(getLogKey(), "VuMark FOUND:" + vuMark);
             robot.setVuMark(vuMark);
             return true;
-        } else if (System.currentTimeMillis() > this.startTimeMilliSeconds + 5000) {
-
-            Log.i(getLogKey(), "VuMark DEFAULTED on Timeout:" + RelicRecoveryVuMark.CENTER);
-            robot.setVuMark(RelicRecoveryVuMark.CENTER);
-            return true;
-
         } else {
             Log.i(getLogKey(), "VuMark not visible");
             return false;

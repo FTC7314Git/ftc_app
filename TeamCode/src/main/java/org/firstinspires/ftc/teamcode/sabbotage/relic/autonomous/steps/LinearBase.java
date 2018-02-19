@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-@Autonomous(name = "LinearBlueEasy", group = "Blue")
+
 public class LinearBase extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -86,9 +88,16 @@ public class LinearBase extends LinearOpMode {
         Long timeOutMs = System.currentTimeMillis() + maxTimeMs;
 
         step.setRobot(this.robot);
+        Log.i(step.getLogKey(), "runStepUntilDone: " + step.getLogKey());
+
+        Log.i(step.getLogKey(), "opModeIsActive:" + opModeIsActive());
+        Log.i(step.getLogKey(), "Not isStepDone:" + !step.isStepDone());
+        Log.i(step.getLogKey(), "timeOut:" + (timeOutMs > System.currentTimeMillis()));
+
 
         while (opModeIsActive() && !step.isStepDone() && timeOutMs > System.currentTimeMillis()) {
 
+            Log.i(step.getLogKey(), "step.runStep: " + step.getLogKey());
             step.runStep();
             // Display it for the driver.
             telemetry.addData("Path1", "Running Step: " + step.getLogKey());

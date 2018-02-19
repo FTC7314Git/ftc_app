@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
-@Autonomous(name = "LinearBlueEasy", group = "Blue")
+@Autonomous(name = "LinearRedEasy", group = "Red")
 public class LinearRedEasy extends LinearBase {
 
 

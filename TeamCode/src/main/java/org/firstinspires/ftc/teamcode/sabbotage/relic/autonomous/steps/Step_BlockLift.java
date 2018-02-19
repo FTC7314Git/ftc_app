@@ -38,8 +38,6 @@ public class Step_BlockLift implements AutonomousOp.StepInterface, StepInterface
 
         if (robot.isStillWaiting()) return;
 
-        int targetBlockLiftPosition = 180;
-
         robot.motorBlockLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBlockLift.setTargetPosition(targetBlockLiftPosition);
         robot.motorBlockLift.setPower(.6);
@@ -53,11 +51,7 @@ public class Step_BlockLift implements AutonomousOp.StepInterface, StepInterface
 
         if (robot.isStillWaiting()) return false;
 
-        if (this.blockLiftDoneFlag) {
-
-            return true;
-        }
-        return false;
+        return blockLiftDoneFlag && !robot.motorBlockLift.isBusy();
     }
 
 

@@ -63,9 +63,8 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInt
         if (lowerJewelArmDoneFlag == false) {
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_DOWN);
             lowerJewelArmDoneFlag = true;
-            robot.setTimeDelay(500);
+            robot.sleep(500);
             Log.i(getLogKey(), "lowerJewelArm_runsOnlyOnce Robot at Angle:" + robot.getAngle());
-            System.out.println("hi");
         }
     }
 
@@ -78,7 +77,7 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInt
 
             robot.servoJewelArm.setPosition(robot.SERVO_JEWEL_ARM_POSITION_UP);
             raiseJewelArmDoneFlag = true;
-            robot.setTimeDelay(500);
+            robot.sleep(500);
             Log.i(getLogKey(), "raiseJewelArm_runsOnlyOnce");
         }
     }
@@ -90,7 +89,7 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInt
 
             robot.servoJewelWrist.setPosition(robot.SERVO_JEWEL_WRIST_POSITION_MIDDLE);
             resetJewelWristDoneFlag = true;
-            robot.setTimeDelay(500);
+            robot.sleep(500);
             Log.i(getLogKey(), "resetJewelWrist_runsOnlyOnce robot.SERVO_JEWEL_WRIST_POSITION_MIDDLE");
         }
     }
@@ -98,12 +97,10 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInt
 
     private void displaceJewel_runsOnlyOnce() {
 
-        if (robot.isStillWaiting()) return;
-
         if (displaceJewelDoneFlag == false) {
             displaceJewel();
             displaceJewelDoneFlag = true;
-            robot.setTimeDelay(1000);
+            robot.sleep(1000);
             Log.i(getLogKey(), "displaceJewel_runsOnlyOnce");
         }
     }
@@ -123,18 +120,12 @@ public class Step_JewelScoringV2 implements AutonomousOp.StepInterface , StepInt
 
     @Override
     public boolean isStepDone() {
-        if (robot.isStillWaiting()) return false;
 
-        if (this.raiseJewelArmDoneFlag) {
-
-            return true;
-        }
-        return false;
+        return raiseJewelArmDoneFlag;
     }
 
     private void determineJewelColor() {
 
-        if (robot.isStillWaiting()) return;
 
         if (isJewelColorKnown()) {
             return;

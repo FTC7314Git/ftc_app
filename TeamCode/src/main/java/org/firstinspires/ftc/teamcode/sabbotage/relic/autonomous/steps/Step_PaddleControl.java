@@ -31,22 +31,26 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface, StepInter
     @Override
     public void runStep() {
 
+        Log.i(getLogKey(), "runStep");
         if (paddlePositionDoneFlag == false) {
 
             if (Robot.PaddlePosition.CLOSE.equals(this.paddlePosition)) {
 
                 robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
                 robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_LEFT_CLOSE);
+                Log.i(getLogKey(), "CLOSE Servos");
             }
 
             if (Robot.PaddlePosition.OPEN.equals(this.paddlePosition)) {
 
                 robot.servoLeftPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
                 robot.servoRightPaddle.setPosition(Robot.SERVO_PADDLE_RIGHT_OPEN);
+                Log.i(getLogKey(), "Open Servos");
             }
 
             paddlePositionDoneFlag = true;
-            robot.setTimeDelay(1000);
+
+            robot.sleep(1000);
 
         }
 
@@ -61,7 +65,7 @@ public class Step_PaddleControl implements AutonomousOp.StepInterface, StepInter
             return false;
         }
 
-        return true;
+        return paddlePositionDoneFlag;
     }
 
 

@@ -26,67 +26,6 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
     private final int DONE_TOLERANCE = 50;
 
 
-    public static int getTargetDistance(Robot.RobotStartPositionEnum robotStartPositionEnum,
-                                        RelicRecoveryVuMark relicRecoveryVuMarkEnum) {
-
-
-        if (Robot.RobotStartPositionEnum.RED_LEFT_SIDE.equals(robotStartPositionEnum)) {
-
-            switch (relicRecoveryVuMarkEnum) {
-                case LEFT:
-                    return 2400;
-                case CENTER:
-                    return 2000;
-                case RIGHT:
-                    return 1600;
-
-            }
-        }
-
-        if (Robot.RobotStartPositionEnum.RED_RIGHT_SIDE.equals(robotStartPositionEnum)) {
-
-            switch (relicRecoveryVuMarkEnum) {
-                case LEFT:
-                    return 500;
-                case CENTER:
-                    return 600;
-                case RIGHT:
-                    return 800;
-
-
-            }
-        }
-
-        if (Robot.RobotStartPositionEnum.BLUE_LEFT_SIDE.equals(robotStartPositionEnum)) {
-
-            switch (relicRecoveryVuMarkEnum) {
-                case LEFT:
-                    return 1000;
-                case CENTER:
-                    return 1000;
-                case RIGHT:
-                    return 1000;
-
-            }
-        }
-
-        if (Robot.RobotStartPositionEnum.BLUE_RIGHT_SIDE.equals(robotStartPositionEnum)) {
-
-            switch (relicRecoveryVuMarkEnum) {
-                case RIGHT:
-                    return 2200;  // 2600
-                case CENTER:
-                    return 1800;  // 2200
-                case LEFT:
-                    return 1500;  // 1800
-
-
-            }
-        }
-
-        return 0;
-    }
-
     // Constructor, called to create an instance of this class.
     public Step_Straight(Integer distanceEncoderCounts, Robot.DirectionEnum direction) {
 
@@ -100,9 +39,6 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
     public Step_Straight(Robot.RobotStartPositionEnum robotStartPositionEnum,
                          Robot.DirectionEnum direction) {
 
-        this.robotStartPositionEnum = robotStartPositionEnum;
-        this.direction = direction;
-        this.motorPowerEnum = Robot.MotorPowerEnum.High;
     }
 
 
@@ -116,44 +52,16 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
     public void runStep() {
 
 
-        initializeSetupForVuMarkDistances_Only_Once();
-
-
         resetEncodersAndStopMotors_Only_Once();
 
-        logEncoders("run");
-
-        if (robot.isStillWaiting()) {
-            return;
-        }
+//        logEncoders("run");
 
         initializeMotors_Only_Once();
-
-        if (robot.isStillWaiting()) {
-            return;
-        }
 
         goStraight();
 
 
     }
-
-
-    private void initializeSetupForVuMarkDistances_Only_Once() {
-
-        if (this.targetDistanceEncoderCounts != null) {
-            return;
-        }
-
-        // TODO, remove this, StepVuMark will set this value.
-//        robot.setVuMark(RelicRecoveryVuMark.LEFT);
-
-
-        this.targetDistanceEncoderCounts = getTargetDistance(this.robotStartPositionEnum, robot.getVuMark());
-
-        Log.i(getLogKey(), "Start: " + robot.getVuMark() + " for " + this.targetDistanceEncoderCounts);
-    }
-
 
     private DcMotor getEncoderMotor() {
 
@@ -164,6 +72,8 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
     private void goStraight() {
 
         double motorPower = determineMotorPower();
+
+        Log.i(getLogKey(), "goStraight motorPower: " + motorPower);
 
         robot.motorDriveLeft.setPower(motorPower);
         robot.motorDriveRight.setPower(motorPower);
@@ -207,10 +117,12 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
 
         if (!resetMotors_DoneFlag) {
 
+            Log.i(getLogKey(), "resetEncodersAndStopMotors_Only_Once");
+
             robot.resetEncodersAndStopMotors();
             resetMotors_DoneFlag = true;
 
-            robot.setLoopDelay();
+            robot.sleep(1000);
         }
 
     }
@@ -226,10 +138,10 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
 
             robot.runWithEncoders_MAINTAINS_SPEED();
 
-            robot.setLoopDelay();
+            robot.sleep(1000);
             initializedMotors_DoneFlag = true;
 
-            logIt("initializeMotors_Only_Once ...");
+            Log.i(getLogKey(), "initializeMotors_Only_Once");
 
 
         }

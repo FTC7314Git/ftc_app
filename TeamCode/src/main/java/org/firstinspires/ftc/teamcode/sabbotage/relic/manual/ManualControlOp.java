@@ -34,8 +34,8 @@ public class ManualControlOp extends OpMode {
     @Override
     public void init() {
 
-        this.robot = new Robot(hardwareMap, telemetry);
-
+        this.robot = new Robot();
+        this.robot.init(hardwareMap, telemetry);
         init_ResetBlockLift_onlyRunsOnce();
         init_InitEncoders();
     }

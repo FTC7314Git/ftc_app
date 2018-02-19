@@ -22,6 +22,8 @@ public class Step_TurnV2 implements AutonomousOp.StepInterface, StepInterface {
 
 
     // Constructor, called to create an instance of this class.
+    // positive angle for RIGHT turn
+    // LEFT is negitive
     public Step_TurnV2(Double targetAngle) {
         this.targetAngle = targetAngle;
     }
@@ -36,10 +38,6 @@ public class Step_TurnV2 implements AutonomousOp.StepInterface, StepInterface {
     public void runStep() {
 
         resetMotorsAndInitializeDirection_Only_Once();
-
-        if (robot.isStillWaiting()) {
-            return;
-        }
 
         // We should not need to do this, but have see when motor(s) have not been reset.
         robot.runWithEncoders_MAINTAINS_SPEED();
@@ -93,11 +91,10 @@ public class Step_TurnV2 implements AutonomousOp.StepInterface, StepInterface {
 
         if (resetMotors_DoneFlag == false) {
 
-            robot.runWithoutEncoders();
             robot.setDriveMotorForwardDirection();
-
+            robot.runWithEncoders_MAINTAINS_SPEED();
             resetMotors_DoneFlag = true;
-            robot.setLoopDelay();
+            robot.sleep(1000);
         }
 
     }
