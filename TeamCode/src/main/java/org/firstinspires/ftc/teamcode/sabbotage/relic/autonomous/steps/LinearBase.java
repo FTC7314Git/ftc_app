@@ -104,7 +104,7 @@ public class LinearBase extends LinearOpMode {
             telemetry.update();
         }
 
-        sleep(250);   // optional pause after each step
+//        sleep(250);   // optional pause after each step
     }
 
 }
