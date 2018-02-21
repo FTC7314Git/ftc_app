@@ -70,7 +70,7 @@ public class Step_TurnV2 implements AutonomousOp.StepInterface, StepInterface {
     private void turn() {
 
 
-        double power = .03d;
+        double power = .1d;
 
         if (getAdjustedAngle() > targetAngle) {
 

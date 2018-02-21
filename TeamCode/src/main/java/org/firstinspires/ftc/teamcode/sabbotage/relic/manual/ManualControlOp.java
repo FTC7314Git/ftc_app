@@ -17,7 +17,7 @@ public class ManualControlOp extends OpMode {
     private static final int FIRST_FLOOR = 0;
     private static final int SECOND_FLOOR = FIRST_FLOOR + FLOOR + 60;
     private static final int THIRD_FLOOR = SECOND_FLOOR + FLOOR;
-    private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR/2;
+    private static final int FOURTH_FLOOR = THIRD_FLOOR + FLOOR / 2;
 
 
     boolean resetBlockLiftDoneFlag;
@@ -108,11 +108,16 @@ public class ManualControlOp extends OpMode {
     private void operator_extendRelicArm() {
 
         if (gamepad2.right_trigger > .05) {
-            robot.motorExtendRelicArm.setPower(gamepad2.right_trigger);
-        }
 
-        if (gamepad2.left_trigger > .05) {
+            robot.motorExtendRelicArm.setPower(gamepad2.right_trigger);
+
+        } else if (gamepad2.left_trigger > .05) {
+
             robot.motorExtendRelicArm.setPower(-gamepad2.left_trigger);
+
+        } else {
+
+            robot.motorExtendRelicArm.setPower(0);
         }
     }
 
@@ -135,6 +140,7 @@ public class ManualControlOp extends OpMode {
 
 
     }
+
     private void operator_controlPaddles() {
 
         if (gamepad2.x) {

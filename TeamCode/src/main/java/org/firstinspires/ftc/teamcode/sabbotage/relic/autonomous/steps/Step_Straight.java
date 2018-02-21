@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.internal.AutonomousOp;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
@@ -14,14 +13,13 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
     private Integer targetDistanceEncoderCounts = null;
     private Robot.DirectionEnum direction = null;
     private Robot.MotorPowerEnum motorPowerEnum;
-    private Robot.RobotStartPositionEnum robotStartPositionEnum;
     private Robot robot;
 
     private boolean resetMotors_DoneFlag = false;
     private boolean initializedMotors_DoneFlag = false;
 
     private final int SLOW_FINISH_REMAINING_DISANCE = 500;
-    private final int SLOW_START_DISTANCE = 1000;
+    private final int SLOW_START_DISTANCE = 500;
 
     private final int DONE_TOLERANCE = 50;
 
@@ -65,7 +63,7 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
 
     private DcMotor getEncoderMotor() {
 
-        return robot.motorDriveRight;
+        return robot.motorDriveLeft;
 
     }
 
@@ -105,9 +103,9 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
 
     private double limitMinValue(double input) {
 
-        if (input < .05) {
+        if (input < .15) {
 
-            return .05;
+            return .15;
         }
 
         return input;
@@ -122,7 +120,7 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
             robot.resetEncodersAndStopMotors();
             resetMotors_DoneFlag = true;
 
-            robot.sleep(1000);
+            robot.sleep(500);
         }
 
     }
@@ -138,7 +136,7 @@ public class Step_Straight implements AutonomousOp.StepInterface, StepInterface 
 
             robot.runWithEncoders_MAINTAINS_SPEED();
 
-            robot.sleep(1000);
+            robot.sleep(500);
             initializedMotors_DoneFlag = true;
 
             Log.i(getLogKey(), "initializeMotors_Only_Once");

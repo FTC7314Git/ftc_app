@@ -50,15 +50,15 @@ public class LinearBlueEasy extends LinearBase {
 //        runStepUntilDone(new Step_JewelScoringV2(Robot.TeamEnum.BLUE));
 
         robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Log.i("Step_", "robot.motorBlockLift.isBusy" + robot.motorBlockLift.isBusy());
         runStepUntilDone(new Step_BlockLift(200));
-        runStepUntilDone(new Step_ReadVuMark(), 5000L);
+        robot.setVuMark(RelicRecoveryVuMark.CENTER);
+//        runStepUntilDone(new Step_ReadVuMark(), 5000L);
         runStepStraightBasedOnVuMark();
 
-        runStepUntilDone(new Step_TurnV2(+100.0));
+        runStepUntilDone(new Step_TurnV2(-100.0));
         runStepUntilDone(new Step_BlockLift(10));
         runStepUntilDone(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-        runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 3000L);
+        runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 8000L);
         runStepUntilDone(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
     }

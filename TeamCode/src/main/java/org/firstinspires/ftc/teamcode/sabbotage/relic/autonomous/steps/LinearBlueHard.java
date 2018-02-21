@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.sabbotage.relic.autonomous.steps;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.sabbotage.relic.robot.Robot;
 
 @Autonomous(name = "LinearBlueHard", group = "Blue")
@@ -41,19 +42,18 @@ public class LinearBlueHard extends LinearBase {
     protected void executePlan() {
 
         runStepUntilDone(new Step_PaddleControl(Robot.PaddlePosition.CLOSE));
-        runStepUntilDone(new Step_JewelScoringV2(Robot.TeamEnum.BLUE));
-
+//        runStepUntilDone(new Step_JewelScoringV2(Robot.TeamEnum.BLUE));
+//        runStepUntilDone(new Step_ReadVuMark(), 5000L);
         robot.motorBlockLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         runStepUntilDone(new Step_BlockLift(200));
-        runStepUntilDone(new Step_ReadVuMark());
-        runStepUntilDone(new Step_Straight(1400, Robot.DirectionEnum.FORWARD));
-        runStepUntilDone(new Step_TurnV2(+90.0));
-        runStepStraightBasedOnVuMark();
+        robot.setVuMark(RelicRecoveryVuMark.CENTER);
+        runStepUntilDone(new Step_Straight(1400, Robot.DirectionEnum.REVERSE));
 
         runStepTurnBasedOnVuMark();
+
         runStepUntilDone(new Step_BlockLift(10));
         runStepUntilDone(new Step_PaddleControl(Robot.PaddlePosition.OPEN));
-        runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 3000L);
+        runStepUntilDone(new Step_Straight(500, Robot.DirectionEnum.FORWARD), 8000L);
         runStepUntilDone(new Step_Straight(350, Robot.DirectionEnum.REVERSE));
 
     }
@@ -64,10 +64,10 @@ public class LinearBlueHard extends LinearBase {
         switch (robot.getVuMark()) {
 
             case LEFT:
-                angle = 140.0;
+                angle = 145.0;
                 break;
             case CENTER:
-                angle = 140.0;
+                angle = 130.0;
                 break;
             case RIGHT:
                 angle = 140.0;
